@@ -2,7 +2,7 @@
   "compilerOptions": {
     "rootDir": ".",
     "paths": {
-      "react-native-flash-datagrid": ["./src/index"]
+      "expo-flash-datagrid": ["./src/index"]
     },
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,

@@ -18,7 +18,7 @@ import {
   type DataGridLocale,
   type QueryState,
   type RowActionMenuIconProps,
-} from '@gustavohnmarques/react-native-flash-datagrid';
+} from 'expo-flash-datagrid';
 
 type DemoStatus = 'new' | 'active' | 'paused';
 

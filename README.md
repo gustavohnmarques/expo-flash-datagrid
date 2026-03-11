@@ -1,8 +1,8 @@
-# @gustavohnmarques/react-native-flash-datagrid
+# expo-flash-datagrid
 
 React Native data grid and Expo data table built on top of FlashList, with virtualization, sorting, filtering, global search, pagination, row selection, row actions, and localization.
 
-`@gustavohnmarques/react-native-flash-datagrid` is designed for apps that need a more capable table than `FlatList`, while still keeping React Native ergonomics and strong TypeScript support.
+`expo-flash-datagrid` is designed for apps that need a more capable table than `FlatList`, while still keeping React Native ergonomics and strong TypeScript support.
 
 If you are looking for a React Native data table, Expo data grid, mobile datagrid, or a FlashList-based grid component, this package is built for that use case.
 
@@ -50,13 +50,13 @@ If you already have an Expo app, `react`, `react-native`, `expo`, and `expo-font
 ### npm
 
 ```sh
-npm install @gustavohnmarques/react-native-flash-datagrid @shopify/flash-list react-native-safe-area-context @expo/vector-icons expo expo-font
+npm install expo-flash-datagrid @shopify/flash-list react-native-safe-area-context @expo/vector-icons expo expo-font
 ```
 
 ### yarn
 
 ```sh
-yarn add @gustavohnmarques/react-native-flash-datagrid @shopify/flash-list react-native-safe-area-context @expo/vector-icons expo expo-font
+yarn add expo-flash-datagrid @shopify/flash-list react-native-safe-area-context @expo/vector-icons expo expo-font
 ```
 
 Required peers in the host app:
@@ -92,7 +92,7 @@ import {
   DataGrid,
   type ColumnDef,
   type QueryState,
-} from '@gustavohnmarques/react-native-flash-datagrid';
+} from 'expo-flash-datagrid';
 
 type User = {
   id: string;
@@ -191,7 +191,7 @@ import { useEffect, useState } from 'react';
 import {
   DataGrid,
   type QueryState,
-} from '@gustavohnmarques/react-native-flash-datagrid';
+} from 'expo-flash-datagrid';
 
 const initialState: QueryState = {
   paginationModel: { page: 0, pageSize: 25 },
@@ -416,12 +416,6 @@ Run it with:
 cd example
 npx expo start
 ```
-
-## Local Development
-
-For local package rebuilds, tarball testing, and installing the package into another app, see:
-
-- [docs/BUILD_AND_USE_LOCALLY.md](./docs/BUILD_AND_USE_LOCALLY.md)
 
 ## License
 

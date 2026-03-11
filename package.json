@@ -1,6 +1,6 @@
 {
-  "name": "@gustavohnmarques/react-native-flash-datagrid",
-  "version": "0.1.1",
+  "name": "expo-flash-datagrid",
+  "version": "0.1.0",
   "description": "Expo-first React Native data grid and data table built on FlashList with sorting, filtering, search, pagination, selection, and row actions.",
   "main": "./lib/commonjs/index.js",
   "module": "./lib/module/index.js",
@@ -37,7 +37,7 @@
     "!**/.*"
   ],
   "scripts": {
-    "example": "yarn workspace react-native-flash-datagrid-example",
+    "example": "yarn workspace example",
     "clean": "del-cli lib",
     "prepare": "bob build",
     "typecheck": "tsc",
@@ -69,14 +69,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gustavohnmarques/react-native-flash-datagrid.git"
+    "url": "git+https://github.com/gustavohnmarques/expo-flash-datagrid.git"
   },
   "author": "Gustavo Marques <gustavohnmarques@gmail.com> (https://github.com/gustavohnmarques)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/gustavohnmarques/react-native-flash-datagrid/issues"
+    "url": "https://github.com/gustavohnmarques/expo-flash-datagrid/issues"
   },
-  "homepage": "https://github.com/gustavohnmarques/react-native-flash-datagrid#readme",
+  "homepage": "https://github.com/gustavohnmarques/expo-flash-datagrid#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
