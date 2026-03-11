@@ -1,10 +1,28 @@
 # @gustavohnmarques/react-native-flash-datagrid
 
-Mobile-first data grid for React Native with virtualization, sorting, filtering, search, pagination, row selection, row actions, and localization.
+React Native data grid and Expo data table built on top of FlashList, with virtualization, sorting, filtering, global search, pagination, row selection, row actions, and localization.
 
-The component is designed for apps that need a more capable table than `FlatList`, while still keeping React Native ergonomics and strong TypeScript support.
+`@gustavohnmarques/react-native-flash-datagrid` is designed for apps that need a more capable table than `FlatList`, while still keeping React Native ergonomics and strong TypeScript support.
 
-## Highlights
+If you are looking for a React Native data table, Expo data grid, mobile datagrid, or a FlashList-based grid component, this package is built for that use case.
+
+## What It Is
+
+This package focuses on mobile-first tabular data experiences for Expo and React Native apps:
+
+- CRM and admin lists
+- inventory and catalog screens
+- financial and operational tables
+- searchable and filterable mobile datasets
+- server-driven tables with pagination or infinite loading
+
+## Current Status
+
+Expo-only for now.
+
+The package currently depends on `@expo/vector-icons` and `expo-font`, so it is intended for Expo projects at the moment. A bare React Native version would require replacing that dependency chain first.
+
+## Features
 
 - FlashList-powered rendering for large datasets
 - Client and server data modes
@@ -15,6 +33,13 @@ The component is designed for apps that need a more capable table than `FlatList
 - Theme overrides and locale overrides
 - Built-in English and Portuguese locale bundles
 - Exported pure utilities for sorting, filtering, search, and pagination
+
+## Why This Package
+
+- Better fit than a plain `FlatList` when you need real table behavior on mobile
+- Strong TypeScript API for rows, columns, filters, pagination, and events
+- Familiar data-grid concepts inspired by desktop grids, adapted to touch-first UX
+- Good fit for Expo apps that need an MUI-like data grid experience in React Native
 
 ## Installation
 
