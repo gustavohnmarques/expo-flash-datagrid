@@ -1,6 +1,6 @@
 {
   "name": "@gustavohnmarques/react-native-flash-datagrid",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Expo-first React Native data grid and data table built on FlashList with sorting, filtering, search, pagination, selection, and row actions.",
   "main": "./lib/commonjs/index.js",
   "module": "./lib/module/index.js",
