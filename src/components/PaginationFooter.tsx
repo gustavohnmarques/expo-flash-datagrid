@@ -18,6 +18,8 @@ interface PaginationFooterProps {
   paginationModel: PaginationModel;
   pageSizeOptions: number[];
   rowCount: number;
+  rangePaginationModel?: PaginationModel;
+  rangeRowCount?: number;
   footerHeight: number;
   footerBackground: string;
   borderColor: string;
@@ -31,6 +33,8 @@ export const PaginationFooter = React.memo(function PaginationFooter({
   paginationModel,
   pageSizeOptions,
   rowCount,
+  rangePaginationModel,
+  rangeRowCount,
   footerHeight,
   footerBackground,
   borderColor,
@@ -41,9 +45,12 @@ export const PaginationFooter = React.memo(function PaginationFooter({
 }: PaginationFooterProps) {
   const [isPageSizeMenuVisible, setIsPageSizeMenuVisible] = useState(false);
   const [draftPageSize, setDraftPageSize] = useState(paginationModel.pageSize);
+  const resolvedRangePaginationModel = rangePaginationModel ?? paginationModel;
+  const resolvedRangeRowCount = rangeRowCount ?? rowCount;
   const range = useMemo(
-    () => getPaginationRange(rowCount, paginationModel),
-    [paginationModel, rowCount]
+    () =>
+      getPaginationRange(resolvedRangeRowCount, resolvedRangePaginationModel),
+    [resolvedRangePaginationModel, resolvedRangeRowCount]
   );
 
   const currentPage = Math.max(0, paginationModel.page);
@@ -110,7 +117,9 @@ export const PaginationFooter = React.memo(function PaginationFooter({
         <Text style={styles.rangeLabel}>
           {loading
             ? localeText.loadingMoreRows
-            : formatLocale(localeText.rowsLoadedLabel, { count: rowCount })}
+            : formatLocale(localeText.rowsLoadedLabel, {
+                count: resolvedRangeRowCount,
+              })}
         </Text>
       </View>
     );

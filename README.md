@@ -230,6 +230,93 @@ export function ServerUsersScreen() {
 }
 ```
 
+### Server mode with local toolbar search
+
+Some server-driven screens need column filters and sorting to stay on the API, while the search icon should only filter the rows that have already been returned.
+
+Use `serverSearchMode="localRows"` for that hybrid behavior:
+
+- column filters stay server-side
+- sorting stays server-side
+- the toolbar search filters only the current `rows`
+- `searchText` remains available for remote search flows
+- `serverLocalSearchText` controls the local toolbar search when you need it
+
+```tsx
+import { useEffect, useState } from 'react';
+import {
+  DataGrid,
+  applyFilter,
+  applySearch,
+  applySorting,
+  type QueryState,
+  type ServerSearchMode,
+} from 'expo-flash-datagrid';
+
+const initialState: QueryState = {
+  paginationModel: { page: 0, pageSize: 25 },
+  sortModel: [],
+  filterModel: { items: [], logicOperator: 'and' },
+  searchText: '',
+  columnVisibilityModel: {},
+  selectionModel: [],
+};
+
+export function HybridServerUsersScreen() {
+  const [state, setState] = useState<QueryState>(initialState);
+  const [rows, setRows] = useState<User[]>([]);
+  const [rowCount, setRowCount] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [serverSearchMode, setServerSearchMode] =
+    useState<ServerSearchMode>('localRows');
+  const [serverLocalSearchText, setServerLocalSearchText] = useState('');
+
+  useEffect(() => {
+    setLoading(true);
+
+    const remotelyFiltered = applyFilter(ALL_USERS, columns, state.filterModel);
+    const remotelySearched = applySearch(
+      remotelyFiltered,
+      columns,
+      serverSearchMode === 'remote' ? state.searchText : ''
+    );
+    const remotelySorted = applySorting(
+      remotelySearched,
+      columns,
+      state.sortModel
+    );
+
+    const from = state.paginationModel.page * state.paginationModel.pageSize;
+    const to = from + state.paginationModel.pageSize;
+
+    setRows(remotelySorted.slice(from, to));
+    setRowCount(remotelySorted.length);
+    setLoading(false);
+  }, [columns, serverSearchMode, state]);
+
+  return (
+    <DataGrid<User>
+      mode="server"
+      rows={rows}
+      columns={columns}
+      rowCount={rowCount}
+      state={state}
+      onStateChange={setState}
+      loading={loading}
+      serverSearchMode={serverSearchMode}
+      serverLocalSearchText={serverLocalSearchText}
+      onServerLocalSearchTextChange={setServerLocalSearchText}
+    />
+  );
+}
+```
+
+When `serverSearchMode="localRows"` and the toolbar search has text:
+
+- paged server mode shows the local match count in the footer range while keeping page navigation based on the remote `rowCount`
+- infinite mode shows the local match count for the loaded rows currently in memory
+- the local search does not emit a new remote query by itself
+
 ## Common Customizations
 
 ### Empty state and localization
@@ -364,6 +451,7 @@ Search matches:
 - raw cell values
 - `valueFormatter` output
 - `filterSelectOptions` labels and values
+- in `mode="server"` with `serverSearchMode="localRows"`, the search icon matches only the current `rows`
 
 ```tsx
 const columns: ColumnDef<User>[] = [
@@ -439,6 +527,7 @@ The engine also accepts a few aliases for compatibility, but `filterForceOperato
 When search text, column filters, or hidden columns are active, the toolbar shows a `Clear filters` action before the buttons. It resets:
 
 - `searchText`
+- `serverLocalSearchText`
 - `filterModel`
 - `columnVisibilityModel`
 
@@ -450,7 +539,7 @@ Main `DataGrid` prop groups:
 - State: `state`, `initialState`, `onStateChange`, `onQueryChange`
 - Sorting: `sortModel`, `onSortModelChange`, `enableMultiSort`
 - Filtering: `filterModel`, `onFilterModelChange`, `maxFilters`
-- Search: `searchText`, `onSearchTextChange`, `searchDebounceMs`
+- Search: `searchText`, `onSearchTextChange`, `searchDebounceMs`, `serverSearchMode`, `serverLocalSearchText`, `onServerLocalSearchTextChange`
 - Visibility: `columnVisibilityModel`, `onColumnVisibilityModelChange`
 - Pagination: `paginationModel`, `onPaginationModelChange`, `pageSizeOptions`, `rowCount`
 - Loading: `loading`, `refreshing`, `onRefresh`, `infinite`, `onEndReached`
@@ -488,6 +577,7 @@ The repository includes an Expo example in `example/` with:
 
 - 10k client rows
 - simulated server mode
+- server mode with optional local toolbar search on returned rows
 - infinite loading
 - filters for multiple column types
 - row actions and actions columns

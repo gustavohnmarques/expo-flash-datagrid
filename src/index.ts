@@ -30,6 +30,7 @@ export type {
   RowActionMenuIconProps,
   RowActionMenuOpenParams,
   RowLongPressParams,
+  ServerSearchMode,
   SortDirection,
   SortItem,
   SortModel,

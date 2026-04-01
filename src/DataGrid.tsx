@@ -23,7 +23,9 @@ import { Toolbar } from './components/Toolbar';
 import { useColumnLayout } from './hooks/useColumnLayout';
 import { useDebouncedValue } from './hooks/useDebouncedValue';
 import { resolveLocaleText } from './localization/localeText';
+import { resolveFooterState } from './utils/footerState';
 import { applyClientPipeline } from './utils/pagination';
+import { applySearch } from './utils/searching';
 import {
   areColumnVisibilityModelsEqual,
   areFilterModelsEqual,
@@ -202,6 +204,9 @@ export function DataGrid<TRow>({
   searchText: controlledSearchText,
   onSearchTextChange,
   searchDebounceMs = 300,
+  serverSearchMode = 'remote',
+  serverLocalSearchText: controlledServerLocalSearchText,
+  onServerLocalSearchTextChange,
   columnVisibilityModel: controlledColumnVisibilityModel,
   onColumnVisibilityModelChange,
   paginationModel: controlledPaginationModel,
@@ -334,6 +339,18 @@ export function DataGrid<TRow>({
   ]);
   const resolvedStateRef = useRef<QueryState>(resolvedState);
   resolvedStateRef.current = resolvedState;
+  const [internalServerLocalSearchText, setInternalServerLocalSearchText] =
+    useState(controlledServerLocalSearchText ?? '');
+  const isServerLocalSearchControlled =
+    controlledServerLocalSearchText !== undefined;
+  const resolvedServerLocalSearchText =
+    controlledServerLocalSearchText ?? internalServerLocalSearchText;
+  const isServerLocalSearchEnabled =
+    mode === 'server' && serverSearchMode === 'localRows';
+  const effectiveSearchText = isServerLocalSearchEnabled
+    ? resolvedServerLocalSearchText
+    : resolvedState.searchText;
+  const hasActiveSearch = Boolean(effectiveSearchText.trim());
 
   const isPaginationControlled =
     controlledPaginationModel !== undefined ||
@@ -486,19 +503,40 @@ export function DataGrid<TRow>({
     ]
   );
 
-  const [searchDraft, setSearchDraft] = useState(resolvedState.searchText);
+  useEffect(() => {
+    if (controlledServerLocalSearchText === undefined) {
+      return;
+    }
+
+    setInternalServerLocalSearchText((previous) =>
+      previous === controlledServerLocalSearchText
+        ? previous
+        : controlledServerLocalSearchText
+    );
+  }, [controlledServerLocalSearchText]);
+
+  const [searchDraft, setSearchDraft] = useState(effectiveSearchText);
   useEffect(() => {
     setSearchDraft((previous) =>
-      previous === resolvedState.searchText
-        ? previous
-        : resolvedState.searchText
+      previous === effectiveSearchText ? previous : effectiveSearchText
     );
-  }, [resolvedState.searchText]);
+  }, [effectiveSearchText]);
 
   const debouncedSearchText = useDebouncedValue(searchDraft, searchDebounceMs);
 
   const commitSearchText = useCallback(
     (nextSearchText: string) => {
+      if (isServerLocalSearchEnabled) {
+        if (!isServerLocalSearchControlled) {
+          setInternalServerLocalSearchText((previous) =>
+            previous === nextSearchText ? previous : nextSearchText
+          );
+        }
+
+        onServerLocalSearchTextChange?.(nextSearchText);
+        return;
+      }
+
       const { paginationModel } = resolvedStateRef.current;
       updateQueryState({
         searchText: nextSearchText,
@@ -508,7 +546,12 @@ export function DataGrid<TRow>({
         },
       });
     },
-    [updateQueryState]
+    [
+      isServerLocalSearchControlled,
+      isServerLocalSearchEnabled,
+      onServerLocalSearchTextChange,
+      updateQueryState,
+    ]
   );
 
   useEffect(() => {
@@ -516,7 +559,7 @@ export function DataGrid<TRow>({
       return;
     }
 
-    if (debouncedSearchText === resolvedState.searchText) {
+    if (debouncedSearchText === effectiveSearchText) {
       return;
     }
 
@@ -524,8 +567,8 @@ export function DataGrid<TRow>({
   }, [
     commitSearchText,
     debouncedSearchText,
+    effectiveSearchText,
     isSearchModalVisible,
-    resolvedState.searchText,
   ]);
 
   useEffect(() => {
@@ -558,15 +601,30 @@ export function DataGrid<TRow>({
 
     return resolvedState.sortModel.slice(0, 1);
   }, [enableMultiSort, resolvedState.sortModel]);
+  const safeServerRowCount = useMemo(
+    () => toSafeRowCount(rowCount, rows.length),
+    [rowCount, rows.length]
+  );
+  const serverRowsAfterSearch = useMemo(() => {
+    if (!isServerLocalSearchEnabled) {
+      return rows;
+    }
+
+    return applySearch(rows, columns, resolvedServerLocalSearchText);
+  }, [
+    columns,
+    isServerLocalSearchEnabled,
+    resolvedServerLocalSearchText,
+    rows,
+  ]);
+  const serverLocalSearchActive = isServerLocalSearchEnabled && hasActiveSearch;
 
   const pipeline = useMemo(() => {
-    const safeRowCount = toSafeRowCount(rowCount, rows.length);
-
     if (mode === 'server') {
       return {
-        sortedRows: rows,
-        paginatedRows: rows,
-        totalRows: safeRowCount,
+        sortedRows: serverRowsAfterSearch,
+        paginatedRows: serverRowsAfterSearch,
+        totalRows: safeServerRowCount,
       };
     }
 
@@ -596,14 +654,29 @@ export function DataGrid<TRow>({
     resolvedState.paginationModel,
     resolvedState.searchText,
     rows,
-    rowCount,
+    safeServerRowCount,
+    serverRowsAfterSearch,
   ]);
 
   const displayRows = infinite ? pipeline.sortedRows : pipeline.paginatedRows;
   const resolvedRowCount =
-    mode === 'server'
-      ? toSafeRowCount(rowCount, rows.length)
-      : pipeline.totalRows;
+    mode === 'server' ? safeServerRowCount : pipeline.totalRows;
+  const footerState = useMemo(
+    () =>
+      resolveFooterState({
+        paginationModel: resolvedState.paginationModel,
+        localRowCount: serverRowsAfterSearch.length,
+        localSearchActive: mode === 'server' && serverLocalSearchActive,
+        infinite,
+      }),
+    [
+      infinite,
+      mode,
+      resolvedState.paginationModel,
+      serverLocalSearchActive,
+      serverRowsAfterSearch.length,
+    ]
+  );
   const shouldShowEmptyState = !loading && displayRows.length === 0;
   const hasActiveColumns = useMemo(
     () =>
@@ -855,9 +928,26 @@ export function DataGrid<TRow>({
   }, [updateQueryState]);
 
   const handleClearFilters = useCallback(() => {
-    const { paginationModel } = resolvedStateRef.current;
+    const { columnVisibilityModel, filterModel, paginationModel, searchText } =
+      resolvedStateRef.current;
+    const hasRemoteHiddenColumns = Object.values(columnVisibilityModel).some(
+      (isVisible) => isVisible === false
+    );
+    const shouldResetRemoteQuery =
+      Boolean(searchText.trim()) ||
+      filterModel.items.length > 0 ||
+      hasRemoteHiddenColumns;
 
     setSearchDraft('');
+    if (!isServerLocalSearchControlled) {
+      setInternalServerLocalSearchText('');
+    }
+    onServerLocalSearchTextChange?.('');
+
+    if (!shouldResetRemoteQuery) {
+      return;
+    }
+
     updateQueryState({
       searchText: '',
       filterModel: DEFAULT_FILTER_MODEL,
@@ -867,7 +957,11 @@ export function DataGrid<TRow>({
         page: 0,
       },
     });
-  }, [updateQueryState]);
+  }, [
+    isServerLocalSearchControlled,
+    onServerLocalSearchTextChange,
+    updateQueryState,
+  ]);
 
   const renderRow = useCallback(
     ({ item, index }: { item: TRow; index: number }) => {
@@ -945,9 +1039,17 @@ export function DataGrid<TRow>({
   }, [commitSearchText, searchDraft]);
 
   const handleCloseSearchModal = useCallback(() => {
-    setSearchDraft(resolvedStateRef.current.searchText);
+    const nextSearchText = isServerLocalSearchEnabled
+      ? controlledServerLocalSearchText ?? internalServerLocalSearchText
+      : resolvedStateRef.current.searchText;
+
+    setSearchDraft(nextSearchText);
     setIsSearchModalVisible(false);
-  }, []);
+  }, [
+    controlledServerLocalSearchText,
+    internalServerLocalSearchText,
+    isServerLocalSearchEnabled,
+  ]);
 
   const handleClearSearch = useCallback(() => {
     setSearchDraft('');
@@ -991,7 +1093,7 @@ export function DataGrid<TRow>({
         textColor={mergedTheme.toolbarTextColor}
         localeText={mergedLocaleText}
         hasActiveColumns={hasActiveColumns}
-        hasActiveSearch={Boolean(resolvedState.searchText.trim())}
+        hasActiveSearch={hasActiveSearch}
         hasActiveFilters={resolvedState.filterModel.items.length > 0}
         title={toolbarTitle}
         onClearFilters={handleClearFilters}
@@ -1063,6 +1165,8 @@ export function DataGrid<TRow>({
           paginationModel={resolvedState.paginationModel}
           pageSizeOptions={resolvedPageSizeOptions}
           rowCount={resolvedRowCount}
+          rangePaginationModel={footerState.rangePaginationModel}
+          rangeRowCount={footerState.rangeRowCount}
           footerHeight={mergedTheme.footerHeight}
           footerBackground={mergedTheme.footerBackground}
           borderColor={mergedTheme.borderColor}

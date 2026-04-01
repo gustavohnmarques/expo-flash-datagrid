@@ -18,6 +18,7 @@ import {
   type DataGridLocale,
   type QueryState,
   type RowActionMenuIconProps,
+  type ServerSearchMode,
 } from 'expo-flash-datagrid';
 
 type DemoStatus = 'new' | 'active' | 'paused';
@@ -130,6 +131,9 @@ export function DataGridDemo() {
   const [mode, setMode] = useState<'client' | 'server'>('client');
   const [locale, setLocale] = useState<DataGridLocale>('pt');
   const [serverInfinite, setServerInfinite] = useState(false);
+  const [serverSearchMode, setServerSearchMode] =
+    useState<ServerSearchMode>('remote');
+  const [serverLocalSearchText, setServerLocalSearchText] = useState('');
 
   const [clientState, setClientState] = useState<QueryState>(DEFAULT_STATE);
 
@@ -293,6 +297,8 @@ export function DataGridDemo() {
       const requestId = ++requestIdRef.current;
       setServerLoading(true);
       const pageSize = serverState.paginationModel.pageSize;
+      const remoteSearchText =
+        serverSearchMode === 'remote' ? serverState.searchText : '';
 
       setTimeout(() => {
         if (requestId !== requestIdRef.current) {
@@ -304,7 +310,7 @@ export function DataGridDemo() {
           columns,
           serverState.filterModel
         );
-        const searched = applySearch(filtered, columns, serverState.searchText);
+        const searched = applySearch(filtered, columns, remoteSearchText);
         const sorted = applySorting(searched, columns, serverState.sortModel);
 
         setServerRowCount(sorted.length);
@@ -326,6 +332,7 @@ export function DataGridDemo() {
       serverState.paginationModel.pageSize,
       serverState.searchText,
       serverState.sortModel,
+      serverSearchMode,
     ]
   );
 
@@ -349,6 +356,7 @@ export function DataGridDemo() {
     serverState.paginationModel.pageSize,
     serverState.searchText,
     serverState.sortModel,
+    serverSearchMode,
   ]);
 
   const handleServerEndReached = useCallback(() => {
@@ -453,6 +461,29 @@ export function DataGridDemo() {
     [mode, serverInfinite]
   );
 
+  const handleServerSearchModeChange = useCallback(
+    (nextMode: ServerSearchMode) => {
+      if (nextMode === serverSearchMode) {
+        return;
+      }
+
+      setServerSearchMode(nextMode);
+      setServerLocalSearchText('');
+      setServerCursor(0);
+      setServerState((previous) => ({
+        ...previous,
+        searchText: '',
+        paginationModel: serverInfinite
+          ? previous.paginationModel
+          : {
+              ...previous.paginationModel,
+              page: 0,
+            },
+      }));
+    },
+    [serverInfinite, serverSearchMode]
+  );
+
   const activeState = mode === 'client' ? clientState : serverState;
   const eventFallbackLabel =
     locale === 'pt'
@@ -473,6 +504,22 @@ export function DataGridDemo() {
     locale === 'pt'
       ? `Server mode: ${serverInfinite ? 'infinite ligado' : 'paginado'}`
       : `Server mode: ${serverInfinite ? 'infinite on' : 'paged'}`;
+  const serverSearchLabel =
+    locale === 'pt'
+      ? `Busca textual: ${
+          serverSearchMode === 'localRows'
+            ? 'local nos rows retornados'
+            : 'remota na query'
+        }`
+      : `Text search: ${
+          serverSearchMode === 'localRows'
+            ? 'local on returned rows'
+            : 'remote in query'
+        }`;
+  const hybridSearchHint =
+    locale === 'pt'
+      ? 'Em "Local rows", a lupa busca apenas nos dados já retornados pelo server. Filtros de coluna e ordenação continuam server-side.'
+      : 'With "Local rows", the search icon filters only the data already returned by the server. Column filters and sorting stay server-side.';
   const emptyGridLabel =
     locale === 'pt'
       ? 'Nenhum resultado para os filtros atuais'
@@ -487,7 +534,7 @@ export function DataGridDemo() {
           <View style={styles.header}>
             <Text style={styles.title}>Flash DataGrid Demo</Text>
             <Text style={styles.subtitle}>
-              10k rows with client and server modes
+              10k rows with client, server, and hybrid search modes
             </Text>
           </View>
 
@@ -563,14 +610,57 @@ export function DataGridDemo() {
             </View>
 
             {mode === 'server' ? (
-              <Pressable
-                onPress={() => setServerInfinite((previous) => !previous)}
-                style={styles.toggle}
-              >
-                <Text style={styles.toggleLabel}>
-                  Infinite loading: {serverInfinite ? 'ON' : 'OFF'}
-                </Text>
-              </Pressable>
+              <>
+                <Pressable
+                  onPress={() => setServerInfinite((previous) => !previous)}
+                  style={styles.toggle}
+                >
+                  <Text style={styles.toggleLabel}>
+                    Infinite loading: {serverInfinite ? 'ON' : 'OFF'}
+                  </Text>
+                </Pressable>
+
+                <View style={styles.segment}>
+                  <Pressable
+                    style={[
+                      styles.segmentButton,
+                      serverSearchMode === 'remote' &&
+                        styles.segmentButtonActive,
+                    ]}
+                    onPress={() => handleServerSearchModeChange('remote')}
+                  >
+                    <Text
+                      style={[
+                        styles.segmentLabel,
+                        serverSearchMode === 'remote' &&
+                          styles.segmentLabelActive,
+                      ]}
+                    >
+                      Remote search
+                    </Text>
+                  </Pressable>
+                  <Pressable
+                    style={[
+                      styles.segmentButton,
+                      serverSearchMode === 'localRows' &&
+                        styles.segmentButtonActive,
+                    ]}
+                    onPress={() => handleServerSearchModeChange('localRows')}
+                  >
+                    <Text
+                      style={[
+                        styles.segmentLabel,
+                        serverSearchMode === 'localRows' &&
+                          styles.segmentLabelActive,
+                      ]}
+                    >
+                      Local rows
+                    </Text>
+                  </Pressable>
+                </View>
+
+                <Text style={styles.helperText}>{hybridSearchHint}</Text>
+              </>
             ) : null}
           </View>
 
@@ -598,6 +688,9 @@ export function DataGridDemo() {
               checkboxSelection
               rowActions={rowActions}
               searchDebounceMs={280}
+              serverSearchMode={serverSearchMode}
+              serverLocalSearchText={serverLocalSearchText}
+              onServerLocalSearchTextChange={setServerLocalSearchText}
               pageSizeOptions={[10, 25, 50]}
               locale={locale}
               emptyLabel={emptyGridLabel}
@@ -641,6 +734,7 @@ export function DataGridDemo() {
             <Text style={styles.infoCardBody}>{demoSummaryText}</Text>
             <Text style={styles.infoCardMeta}>{datasetLabel}</Text>
             <Text style={styles.infoCardMeta}>{serverLabel}</Text>
+            <Text style={styles.infoCardMeta}>{serverSearchLabel}</Text>
           </View>
 
           <View style={styles.footerInfo}>
@@ -693,6 +787,12 @@ const styles = StyleSheet.create({
     gap: 8,
     marginTop: 10,
     paddingHorizontal: 14,
+  },
+  helperText: {
+    color: '#475569',
+    fontSize: 12,
+    lineHeight: 18,
+    maxWidth: 760,
   },
   segment: {
     flexDirection: 'row',

@@ -243,6 +243,8 @@ export interface FilterOperatorsConfig<TRow> {
   filterOperatorsByField?: Record<string, FilterOperator<TRow>[]>;
 }
 
+export type ServerSearchMode = 'remote' | 'localRows';
+
 export interface DataGridProps<TRow> extends FilterOperatorsConfig<TRow> {
   rows: TRow[];
   columns: ColumnDef<TRow>[];
@@ -275,6 +277,9 @@ export interface DataGridProps<TRow> extends FilterOperatorsConfig<TRow> {
   searchText?: string;
   onSearchTextChange?: (next: string) => void;
   searchDebounceMs?: number;
+  serverSearchMode?: ServerSearchMode;
+  serverLocalSearchText?: string;
+  onServerLocalSearchTextChange?: (next: string) => void;
 
   columnVisibilityModel?: ColumnVisibilityModel;
   onColumnVisibilityModelChange?: (next: ColumnVisibilityModel) => void;
