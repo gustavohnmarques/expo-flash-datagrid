@@ -933,16 +933,18 @@ export function DataGrid<TRow>({
     const hasRemoteHiddenColumns = Object.values(columnVisibilityModel).some(
       (isVisible) => isVisible === false
     );
+    const hasLocalSearch =
+      isServerLocalSearchEnabled &&
+      Boolean(resolvedServerLocalSearchText.trim());
     const shouldResetRemoteQuery =
       Boolean(searchText.trim()) ||
       filterModel.items.length > 0 ||
       hasRemoteHiddenColumns;
 
     setSearchDraft('');
-    if (!isServerLocalSearchControlled) {
-      setInternalServerLocalSearchText('');
+    if (hasLocalSearch) {
+      commitSearchText('');
     }
-    onServerLocalSearchTextChange?.('');
 
     if (!shouldResetRemoteQuery) {
       return;
@@ -958,8 +960,9 @@ export function DataGrid<TRow>({
       },
     });
   }, [
-    isServerLocalSearchControlled,
-    onServerLocalSearchTextChange,
+    commitSearchText,
+    isServerLocalSearchEnabled,
+    resolvedServerLocalSearchText,
     updateQueryState,
   ]);
 
