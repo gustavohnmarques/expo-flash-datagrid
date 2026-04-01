@@ -80,6 +80,11 @@ export interface FilterOperator<TRow = unknown> {
   apply: (params: FilterOperatorParams<TRow>) => boolean;
 }
 
+export interface FilterSelectOption {
+  value: unknown;
+  label: string;
+}
+
 export interface ColumnDef<TRow> {
   field: string;
   headerName: string;
@@ -91,6 +96,10 @@ export interface ColumnDef<TRow> {
   filterable?: boolean;
   hideable?: boolean;
   searchable?: boolean;
+  filterSelectOptions?: FilterSelectOption[];
+  filterSelectMultiple?: boolean;
+  filterForceOperator?: string;
+  filterHideOperator?: boolean;
   valueGetter?: (row: TRow) => unknown;
   valueFormatter?: (value: unknown, row: TRow) => string;
   renderCell?: (params: CellRenderParams<TRow>) => ReactNode;
@@ -134,6 +143,7 @@ export interface DataGridLocaleText {
   toolbarFilters: string;
   toolbarExport: string;
   toolbarSearch: string;
+  clearFilters: string;
   selectedRowsLabel: string; // Use "{count}" placeholder.
   clearSelection: string;
 

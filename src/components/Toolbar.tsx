@@ -12,11 +12,13 @@ interface ToolbarProps {
   localeText: DataGridLocaleText;
   hasActiveSearch: boolean;
   hasActiveFilters: boolean;
+  hasActiveColumns: boolean;
   selectionCount: number;
   title?: React.ReactNode;
   onOpenSearch: () => void;
   onOpenFilters: () => void;
   onOpenColumns: () => void;
+  onClearFilters?: () => void;
   onClearSelection?: () => void;
 }
 
@@ -49,13 +51,18 @@ export const Toolbar = React.memo(function Toolbar({
   localeText,
   hasActiveSearch,
   hasActiveFilters,
+  hasActiveColumns,
   selectionCount,
   title,
   onOpenSearch,
   onOpenFilters,
   onOpenColumns,
+  onClearFilters,
   onClearSelection,
 }: ToolbarProps) {
+  const hasAnyActiveFilter =
+    hasActiveSearch || hasActiveFilters || hasActiveColumns;
+
   return (
     <View
       style={[
@@ -77,37 +84,55 @@ export const Toolbar = React.memo(function Toolbar({
           )
         ) : null}
 
-        <View style={styles.rightIcons}>
-          <ToolbarIconButton
-            accessibilityLabel={localeText.toolbarColumns}
-            onPress={onOpenColumns}
-          >
-            <MaterialIcons color="#6B7280" name="view-column" size={22} />
-          </ToolbarIconButton>
+        <View style={styles.rightControls}>
+          {hasAnyActiveFilter && onClearFilters ? (
+            <Pressable
+              onPress={onClearFilters}
+              style={styles.clearFiltersButton}
+            >
+              <Text style={styles.clearFiltersLabel}>
+                {localeText.clearFilters}
+              </Text>
+            </Pressable>
+          ) : null}
 
-          <ToolbarIconButton
-            accessibilityLabel={localeText.toolbarFilters}
-            active={hasActiveFilters}
-            onPress={onOpenFilters}
-          >
-            <MaterialIcons
-              color={hasActiveFilters ? '#1D4ED8' : '#6B7280'}
-              name="filter-list"
-              size={22}
-            />
-          </ToolbarIconButton>
+          <View style={styles.rightIcons}>
+            <ToolbarIconButton
+              accessibilityLabel={localeText.toolbarColumns}
+              active={hasActiveColumns}
+              onPress={onOpenColumns}
+            >
+              <MaterialIcons
+                color={hasActiveColumns ? '#1D4ED8' : '#6B7280'}
+                name="view-column"
+                size={22}
+              />
+            </ToolbarIconButton>
 
-          <ToolbarIconButton
-            accessibilityLabel={localeText.toolbarSearch}
-            active={hasActiveSearch}
-            onPress={onOpenSearch}
-          >
-            <MaterialIcons
-              color={hasActiveSearch ? '#1D4ED8' : '#6B7280'}
-              name="search"
-              size={22}
-            />
-          </ToolbarIconButton>
+            <ToolbarIconButton
+              accessibilityLabel={localeText.toolbarFilters}
+              active={hasActiveFilters}
+              onPress={onOpenFilters}
+            >
+              <MaterialIcons
+                color={hasActiveFilters ? '#1D4ED8' : '#6B7280'}
+                name="filter-list"
+                size={22}
+              />
+            </ToolbarIconButton>
+
+            <ToolbarIconButton
+              accessibilityLabel={localeText.toolbarSearch}
+              active={hasActiveSearch}
+              onPress={onOpenSearch}
+            >
+              <MaterialIcons
+                color={hasActiveSearch ? '#1D4ED8' : '#6B7280'}
+                name="search"
+                size={22}
+              />
+            </ToolbarIconButton>
+          </View>
         </View>
       </View>
 
@@ -146,6 +171,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 8,
   },
+  rightControls: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 10,
+  },
   titleContainer: {
     flexShrink: 1,
     marginRight: 10,
@@ -156,6 +186,16 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginRight: 10,
     textAlign: 'right',
+  },
+  clearFiltersButton: {
+    paddingHorizontal: 4,
+    paddingVertical: 6,
+    backgroundColor: 'transparent',
+  },
+  clearFiltersLabel: {
+    color: '#9c2121',
+    fontSize: 12,
+    fontWeight: '700',
   },
   iconButton: {
     alignItems: 'center',

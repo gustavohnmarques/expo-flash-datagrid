@@ -20,7 +20,7 @@ This package focuses on mobile-first tabular data experiences for Expo and React
 
 Expo-only for now.
 
-The package currently depends on `@expo/vector-icons` and `expo-font`, so it is intended for Expo projects at the moment. A bare React Native version would require replacing that dependency chain first.
+The package currently depends on `@expo/vector-icons`, `expo-font`, and `@react-native-community/datetimepicker`, so it is intended for Expo projects at the moment. A bare React Native version would require replacing that dependency chain first.
 
 ## Features
 
@@ -50,13 +50,13 @@ If you already have an Expo app, `react`, `react-native`, `expo`, and `expo-font
 ### npm
 
 ```sh
-npm install expo-flash-datagrid @shopify/flash-list react-native-safe-area-context @expo/vector-icons expo expo-font
+npm install expo-flash-datagrid @shopify/flash-list react-native-safe-area-context @expo/vector-icons @react-native-community/datetimepicker expo expo-font
 ```
 
 ### yarn
 
 ```sh
-yarn add expo-flash-datagrid @shopify/flash-list react-native-safe-area-context @expo/vector-icons expo expo-font
+yarn add expo-flash-datagrid @shopify/flash-list react-native-safe-area-context @expo/vector-icons @react-native-community/datetimepicker expo expo-font
 ```
 
 Required peers in the host app:
@@ -66,6 +66,7 @@ Required peers in the host app:
 - `expo`
 - `expo-font`
 - `@expo/vector-icons`
+- `@react-native-community/datetimepicker`
 - `@shopify/flash-list`
 - `react-native-safe-area-context`
 
@@ -88,11 +89,7 @@ export default function App() {
 ```tsx
 import { useState } from 'react';
 import { View } from 'react-native';
-import {
-  DataGrid,
-  type ColumnDef,
-  type QueryState,
-} from 'expo-flash-datagrid';
+import { DataGrid, type ColumnDef, type QueryState } from 'expo-flash-datagrid';
 
 type User = {
   id: string;
@@ -120,8 +117,8 @@ const rows: User[] = [
 ];
 
 const columns: ColumnDef<User>[] = [
-  { field: 'name', headerName: 'Name', flex: 1, searchable: true },
-  { field: 'email', headerName: 'Email', flex: 1.2, searchable: true },
+  { field: 'name', headerName: 'Name', flex: 1 },
+  { field: 'email', headerName: 'Email', flex: 1.2 },
   { field: 'age', headerName: 'Age', type: 'number', width: 90 },
   { field: 'active', headerName: 'Active', type: 'boolean', width: 90 },
 ];
@@ -188,10 +185,7 @@ In `server` mode, the grid does not transform rows locally. It emits state chang
 
 ```tsx
 import { useEffect, useState } from 'react';
-import {
-  DataGrid,
-  type QueryState,
-} from 'expo-flash-datagrid';
+import { DataGrid, type QueryState } from 'expo-flash-datagrid';
 
 const initialState: QueryState = {
   paginationModel: { page: 0, pageSize: 25 },
@@ -250,7 +244,7 @@ The grid ships with `en` and `pt` locale bundles. You can override the empty-sta
   locale="pt"
   emptyLabel="Nenhum cliente encontrado"
   localeText={{
-    rowsPerPage: 'Itens por pagina',
+    rowsPerPage: 'Itens por página',
   }}
 />
 ```
@@ -305,7 +299,7 @@ const rowActions = [
   rows={rows}
   columns={columns}
   rowActions={rowActions}
-/>
+/>;
 ```
 
 ### Actions column
@@ -353,11 +347,100 @@ const columns: ColumnDef<User>[] = [
 - `width`, `minWidth`, `flex`
 - `type`: `'string' | 'number' | 'date' | 'datetime' | 'boolean' | 'actions' | 'custom'`
 - `sortable`, `filterable`, `hideable`, `searchable`
+- `filterSelectOptions`, `filterSelectMultiple`
+- `filterForceOperator`, `filterHideOperator`
 - `valueGetter`, `valueFormatter`
 - `renderCell`, `renderHeader`
 - `sortComparator`, `filterOperators`
 - `align`, `headerAlign`
 - `actions`, `actionTrigger`
+
+### Search Behavior
+
+Global search now checks every non-actions column by default. Set `searchable: false` on a column when you want to opt it out.
+
+Search matches:
+
+- raw cell values
+- `valueFormatter` output
+- `filterSelectOptions` labels and values
+
+```tsx
+const columns: ColumnDef<User>[] = [
+  { field: 'name', headerName: 'Name' },
+  { field: 'internalCode', headerName: 'Internal Code', searchable: false },
+  {
+    field: 'status',
+    headerName: 'Status',
+    filterSelectOptions: [
+      { value: 'CODE-01', label: 'Disponivel' },
+      { value: 'CODE-02', label: 'Em andamento' },
+      { value: 'CODE-03', label: 'Finalizado' },
+    ],
+  },
+];
+```
+
+### Advanced Filters
+
+The built-in filter panel now adapts to the column:
+
+- `number` columns show comparison operators such as equals, greater than, and less than
+- `date` and `datetime` columns show date-aware operators such as is, before, after, is empty, and is not empty
+- operators like `isEmpty` and `isNotEmpty` hide the value input because no value is needed
+- select-based columns can render a built-in single or multi-select value picker
+
+```tsx
+const columns: ColumnDef<User>[] = [
+  {
+    field: 'status',
+    headerName: 'Status',
+    filterSelectOptions: [
+      { value: 'CODE-01', label: 'Disponivel' },
+      { value: 'CODE-02', label: 'Em andamento' },
+      { value: 'CODE-03', label: 'Finalizado' },
+    ],
+    filterForceOperator: 'isAnyOf',
+    filterHideOperator: true,
+    filterSelectMultiple: true,
+  },
+  {
+    field: 'finishedAt',
+    headerName: 'Finished At',
+    type: 'date',
+    filterable: true,
+    valueFormatter: (value) => formatDate(value),
+  },
+  {
+    field: 'version',
+    headerName: 'Version',
+    type: 'number',
+    filterable: true,
+  },
+];
+```
+
+Date filters accept ISO strings such as `2024-01-31`, and also localized inputs such as `31/01/2024`. For `date` columns the comparison is made by day, while `datetime` keeps the time component.
+
+#### `filterForceOperator`
+
+`filterForceOperator` must use the operator `value`, not the translated label. Accepted values depend on the column type:
+
+- `string`, `custom`, `actions`: `contains`, `doesNotContain`, `equals`, `doesNotEqual`, `startsWith`, `endsWith`, `isEmpty`, `isNotEmpty`, `isAnyOf`
+- columns with `filterSelectOptions`: `equals`, `doesNotEqual`, `isAnyOf`, `isEmpty`, `isNotEmpty`
+- `number`: `equals`, `doesNotEqual`, `>`, `>=`, `<`, `<=`, `isEmpty`, `isNotEmpty`
+- `date`, `datetime`: `is`, `not`, `before`, `onOrBefore`, `after`, `onOrAfter`, `isEmpty`, `isNotEmpty`
+- `boolean`: `is`, `isEmpty`
+
+The engine also accepts a few aliases for compatibility, but `filterForceOperator` should prefer the canonical values above.
+
+### Toolbar Clear Filters
+
+When search text, column filters, or hidden columns are active, the toolbar shows a `Clear filters` action before the buttons. It resets:
+
+- `searchText`
+- `filterModel`
+- `columnVisibilityModel`
 
 ## API Overview
 
@@ -392,6 +475,7 @@ The package also exports pure utilities that can be reused in adapters, tests, o
 
 - `applySorting`
 - `applyFilter`
+- `getFilterOperatorsForColumn`
 - `getDefaultFilterOperatorsByType`
 - `applySearch`
 - `paginateRows`

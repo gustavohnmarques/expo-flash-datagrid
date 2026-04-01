@@ -605,6 +605,15 @@ export function DataGrid<TRow>({
       ? toSafeRowCount(rowCount, rows.length)
       : pipeline.totalRows;
   const shouldShowEmptyState = !loading && displayRows.length === 0;
+  const hasActiveColumns = useMemo(
+    () =>
+      columns.some(
+        (column) =>
+          column.hideable !== false &&
+          resolvedState.columnVisibilityModel[column.field] === false
+      ),
+    [columns, resolvedState.columnVisibilityModel]
+  );
 
   const selectedIdSet = useMemo(
     () => new Set(resolvedState.selectionModel),
@@ -845,6 +854,21 @@ export function DataGrid<TRow>({
     });
   }, [updateQueryState]);
 
+  const handleClearFilters = useCallback(() => {
+    const { paginationModel } = resolvedStateRef.current;
+
+    setSearchDraft('');
+    updateQueryState({
+      searchText: '',
+      filterModel: DEFAULT_FILTER_MODEL,
+      columnVisibilityModel: {},
+      paginationModel: {
+        ...paginationModel,
+        page: 0,
+      },
+    });
+  }, [updateQueryState]);
+
   const renderRow = useCallback(
     ({ item, index }: { item: TRow; index: number }) => {
       const rowId = resolveRowId(item, index);
@@ -966,9 +990,11 @@ export function DataGrid<TRow>({
         borderColor={mergedTheme.borderColor}
         textColor={mergedTheme.toolbarTextColor}
         localeText={mergedLocaleText}
+        hasActiveColumns={hasActiveColumns}
         hasActiveSearch={Boolean(resolvedState.searchText.trim())}
         hasActiveFilters={resolvedState.filterModel.items.length > 0}
         title={toolbarTitle}
+        onClearFilters={handleClearFilters}
         onOpenSearch={() => setIsSearchModalVisible(true)}
         onOpenFilters={() => setIsFilterModalVisible(true)}
         onOpenColumns={() => setIsColumnMenuVisible(true)}

@@ -259,6 +259,9 @@ const styles = StyleSheet.create({
   headerButton: {
     justifyContent: 'center',
     minWidth: 72,
+    paddingHorizontal: 6,
+    paddingVertical: 4,
+    backgroundColor: 'transparent',
   },
   cancel: {
     color: '#6B7280',
@@ -296,6 +299,9 @@ const styles = StyleSheet.create({
   actionButton: {
     justifyContent: 'center',
     minHeight: 36,
+    backgroundColor: 'transparent',
+    paddingHorizontal: 6,
+    paddingVertical: 4,
   },
   actionLabel: {
     color: '#2563EB',

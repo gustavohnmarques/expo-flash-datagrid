@@ -168,8 +168,23 @@ export function DataGridDemo() {
     [locale, pushEvent]
   );
 
-  const columns = useMemo<ColumnDef<DemoRow>[]>(
-    () => [
+  const columns = useMemo<ColumnDef<DemoRow>[]>(() => {
+    const statusFilterOptions = [
+      {
+        value: 'new',
+        label: locale === 'pt' ? 'Novo' : 'New',
+      },
+      {
+        value: 'active',
+        label: locale === 'pt' ? 'Ativo' : 'Active',
+      },
+      {
+        value: 'paused',
+        label: locale === 'pt' ? 'Pausado' : 'Paused',
+      },
+    ];
+
+    return [
       {
         field: 'name',
         headerName: 'Name',
@@ -231,7 +246,13 @@ export function DataGridDemo() {
         width: 120,
         sortable: true,
         filterable: true,
-        searchable: true,
+        filterSelectOptions: statusFilterOptions,
+        filterForceOperator: 'isAnyOf',
+        filterHideOperator: true,
+        filterSelectMultiple: true,
+        valueFormatter: (value) =>
+          statusFilterOptions.find((option) => option.value === value)?.label ??
+          String(value ?? ''),
         renderCell: ({ value }) => (
           <View
             style={[
@@ -249,7 +270,7 @@ export function DataGridDemo() {
       },
       {
         field: 'actions',
-        headerName: locale === 'pt' ? 'Acoes' : 'Actions',
+        headerName: locale === 'pt' ? 'Ações' : 'Actions',
         width: 138,
         type: 'actions',
         align: 'center',
@@ -261,12 +282,11 @@ export function DataGridDemo() {
         actionTrigger: {
           display: 'both',
           icon: ActionsTriggerIcon,
-          label: locale === 'pt' ? 'Acoes' : 'Actions',
+          label: locale === 'pt' ? 'Ações' : 'Actions',
         },
       },
-    ],
-    [locale, rowActions]
-  );
+    ];
+  }, [locale, rowActions]);
 
   const fetchServerRows = useCallback(
     (page: number, append: boolean, onComplete?: () => void) => {
@@ -368,14 +388,14 @@ export function DataGridDemo() {
       setClientRefreshing(true);
       pushEvent(
         locale === 'pt'
-          ? 'Atualizacao manual iniciada'
+          ? 'Atualização manual iniciada'
           : 'Manual refresh started'
       );
       setTimeout(() => {
         setClientRefreshing(false);
         pushEvent(
           locale === 'pt'
-            ? 'Atualizacao manual concluida'
+            ? 'Atualização manual concluída'
             : 'Manual refresh completed'
         );
       }, 700);
@@ -397,7 +417,7 @@ export function DataGridDemo() {
         setServerRefreshing(false);
         pushEvent(
           locale === 'pt'
-            ? 'Refresh server concluido'
+            ? 'Refresh server concluído'
             : 'Server refresh completed'
         );
       }
@@ -436,14 +456,14 @@ export function DataGridDemo() {
   const activeState = mode === 'client' ? clientState : serverState;
   const eventFallbackLabel =
     locale === 'pt'
-      ? 'Toque nas linhas/celulas para registrar eventos.'
+      ? 'Toque nas linhas/células para registrar eventos.'
       : 'Tap rows/cells to log events.';
-  const eventsTitle = locale === 'pt' ? 'Ultimos eventos' : 'Latest events';
+  const eventsTitle = locale === 'pt' ? 'Últimos eventos' : 'Latest events';
   const demoSummaryTitle =
     locale === 'pt' ? 'Modo tablet horizontal' : 'Landscape tablet mode';
   const demoSummaryText =
     locale === 'pt'
-      ? 'O exemplo foi ajustado para usar mais largura em tablets, mantendo o grid como area principal.'
+      ? 'O exemplo foi ajustado para usar mais largura em tablets, mantendo o grid como área principal.'
       : 'The example now uses extra tablet width and keeps the grid as the primary surface.';
   const datasetLabel =
     locale === 'pt'

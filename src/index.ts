@@ -15,6 +15,7 @@ export type {
   DataGridLocaleText,
   FilterItem,
   FilterModel,
+  FilterSelectOption,
   FilterOperator,
   FilterOperatorParams,
   FilterOperatorsConfig,
@@ -39,6 +40,7 @@ export { useColumnLayout } from './hooks/useColumnLayout';
 export { applySorting } from './utils/sorting';
 export {
   applyFilter,
+  getFilterOperatorsForColumn,
   getDefaultFilterOperatorsByType,
 } from './utils/filtering';
 export { applySearch } from './utils/searching';

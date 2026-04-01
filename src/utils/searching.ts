@@ -1,12 +1,42 @@
 import type { ColumnDef } from '../types';
+import { createFilterSelectOptionLabelMap, getCellValue } from './columnValues';
 import { isActionColumn } from './rowActions';
 
-function getCellValue<TRow>(row: TRow, column: ColumnDef<TRow>): unknown {
-  if (column.valueGetter) {
-    return column.valueGetter(row);
+interface SearchableColumnRuntime<TRow> {
+  column: ColumnDef<TRow>;
+  optionLabels?: Map<string, string>;
+}
+
+function matchesText(value: unknown, normalizedSearch: string): boolean {
+  if (value === null || value === undefined) {
+    return false;
   }
 
-  return (row as Record<string, unknown>)[column.field];
+  if (Array.isArray(value)) {
+    return value.some((item) => matchesText(item, normalizedSearch));
+  }
+
+  const text = String(value).trim();
+  return text.length > 0 && text.toLowerCase().includes(normalizedSearch);
+}
+
+function matchesOptionLabel(
+  value: unknown,
+  normalizedSearch: string,
+  optionLabels?: Map<string, string>
+): boolean {
+  if (!optionLabels || value === null || value === undefined) {
+    return false;
+  }
+
+  if (Array.isArray(value)) {
+    return value.some((item) =>
+      matchesOptionLabel(item, normalizedSearch, optionLabels)
+    );
+  }
+
+  const label = optionLabels.get(String(value));
+  return label !== undefined && label.toLowerCase().includes(normalizedSearch);
 }
 
 export function applySearch<TRow>(
@@ -19,25 +49,42 @@ export function applySearch<TRow>(
     return rows;
   }
 
-  const searchableColumns = columns.filter(
-    (column) => !isActionColumn(column) && column.searchable === true
-  );
+  const searchableColumns: SearchableColumnRuntime<TRow>[] = [];
+
+  columns.forEach((column) => {
+    if (isActionColumn(column) || column.searchable === false) {
+      return;
+    }
+
+    searchableColumns.push({
+      column,
+      optionLabels: createFilterSelectOptionLabelMap(
+        column.filterSelectOptions
+      ),
+    });
+  });
+
   if (!searchableColumns.length) {
     return rows;
   }
 
   return rows.filter((row) => {
-    for (const column of searchableColumns) {
+    for (const searchableColumn of searchableColumns) {
+      const { column, optionLabels } = searchableColumn;
       const rawValue = getCellValue(row, column);
-      const value = column.valueFormatter
-        ? column.valueFormatter(rawValue, row)
-        : rawValue;
+
+      if (matchesText(rawValue, normalizedSearch)) {
+        return true;
+      }
 
       if (
-        String(value ?? '')
-          .toLowerCase()
-          .includes(normalizedSearch)
+        column.valueFormatter &&
+        matchesText(column.valueFormatter(rawValue, row), normalizedSearch)
       ) {
+        return true;
+      }
+
+      if (matchesOptionLabel(rawValue, normalizedSearch, optionLabels)) {
         return true;
       }
     }
