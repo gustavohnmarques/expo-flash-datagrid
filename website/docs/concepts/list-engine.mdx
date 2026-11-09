@@ -1,0 +1,38 @@
+---
+title: List engine
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import Source from '!!raw-loader!@site/examples/list-engine.tsx';
+
+The grid renders rows through either FlashList or React Native's FlatList. The `listMode` prop picks which one.
+
+| `listMode` | iOS | Android |
+| --- | --- | --- |
+| `'auto'` (default) | FlashList | **FlatList** |
+| `'flash-list'` | FlashList | FlashList |
+| `'flat-list'` | FlatList | FlatList |
+
+:::caution Android uses FlatList by default
+With `listMode="auto"`, Android renders through FlatList. Set `listMode="flash-list"` to use FlashList on both platforms.
+:::
+
+## Basic usage
+
+<CodeBlock language="tsx" title="list-engine.tsx">{Source}</CodeBlock>
+
+## Options
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `listMode` | `'auto' \| 'flash-list' \| 'flat-list'` | `'auto'` | Which list renders the rows. |
+| `drawDistance` | `number` | FlashList default | Pixels rendered beyond the viewport. Applies only when FlashList is used, so Android needs `listMode="flash-list"`. |
+| `rowHeight` | `number` | `44` | Row height. `compact` subtracts 8, with a floor of 34. |
+| `estimatedItemSize` | `number` | None | Deprecated and ignored. FlashList v2 measures rows itself. Removed in 1.0. |
+
+Raising `drawDistance` reduces blank rows during very fast scrolls, at the cost of more work per frame.
+
+## Related
+
+- [DataGrid props](/docs/api/data-grid-props#rendering)
+- [Compatibility](/docs/compatibility)

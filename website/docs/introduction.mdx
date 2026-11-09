@@ -1,0 +1,31 @@
+---
+title: Introduction
+slug: /
+---
+
+`expo-flash-datagrid` is a data table component for Expo and React Native apps. You describe your columns, hand it rows, and get sorting, filtering, global search, pagination, selection, and row actions in one typed component, with rows rendered through [FlashList](https://shopify.github.io/flash-list/).
+
+## Features
+
+- **Client and server modes.** Let the grid process rows in memory, or have it emit query state for your API.
+- **Sorting, filtering, and search.** Single or multi-column sort, typed filter operators, and debounced global search.
+- **Pagination and infinite scroll.** Footer paging with page-size options, or load-on-scroll.
+- **Selection and actions.** Checkbox or long-press selection, row action menus, and actions columns.
+- **Theming and localization.** Partial theme overrides, plus built-in English and Portuguese text.
+- **Headless utilities.** The same sort, filter, and pagination functions are exported for adapters and tests.
+
+## When to use it
+
+Use it when a screen is really a table: CRM and admin lists, inventory and catalogs, financial and operational data, or any dataset people need to narrow down on a phone.
+
+If you only need a scrolling list of cards, a plain FlashList is simpler.
+
+## Platform support
+
+The grid targets **iOS and Android in Expo projects**. It depends on `@expo/vector-icons`, `expo-font`, and `@react-native-community/datetimepicker`, so a bare React Native app is not supported today. Web is not an official target; the date filter picker opens only on iOS and Android.
+
+## Next steps
+
+- [Install the package](/docs/installation)
+- [Build your first grid](/docs/quick-start)
+- [Pick a data mode](/docs/concepts/client-vs-server)

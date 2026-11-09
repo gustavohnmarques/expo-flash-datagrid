@@ -1,0 +1,114 @@
+---
+title: Utilities
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import Source from '!!raw-loader!@site/examples/headless-utils.tsx';
+
+Client mode is built from pure functions, and they are exported for server adapters, exports, and tests.
+
+<CodeBlock language="tsx" title="headless-utils.tsx">{Source}</CodeBlock>
+
+## applyClientPipeline
+
+Runs filter, search, sort, and paginate, and returns the rows after each step.
+
+```ts
+function applyClientPipeline<TRow>(params: {
+  rows: TRow[];
+  columns: ColumnDef<TRow>[];
+  filterModel: FilterModel;
+  searchText: string;
+  sortModel: SortModel;
+  paginationModel: PaginationModel;
+  filterOperatorsByType?: FilterOperatorsConfig<TRow>['filterOperatorsByType'];
+  filterOperatorsByField?: FilterOperatorsConfig<TRow>['filterOperatorsByField'];
+}): {
+  filteredRows: TRow[];
+  searchedRows: TRow[];
+  sortedRows: TRow[];
+  paginatedRows: TRow[];
+};
+```
+
+## applyFilter
+
+```ts
+function applyFilter<TRow>(
+  rows: TRow[],
+  columns: ColumnDef<TRow>[],
+  filterModel: FilterModel,
+  options?: FilterOperatorsConfig<TRow>
+): TRow[];
+```
+
+## applySearch
+
+```ts
+function applySearch<TRow>(rows: TRow[], columns: ColumnDef<TRow>[], searchText: string): TRow[];
+```
+
+## applySorting
+
+```ts
+function applySorting<TRow>(rows: TRow[], columns: ColumnDef<TRow>[], sortModel: SortModel): TRow[];
+```
+
+## paginateRows
+
+```ts
+function paginateRows<TRow>(rows: TRow[], paginationModel: PaginationModel): TRow[];
+```
+
+## getPaginationRange
+
+Returns the one-based range shown in the footer, or zeros when `total` is 0.
+
+```ts
+function getPaginationRange(
+  total: number,
+  paginationModel: PaginationModel
+): { from: number; to: number; total: number };
+```
+
+## getFilterOperatorsForColumn
+
+Returns the operators that apply to a column, following the [resolution order](/docs/guides/custom-filter-operators#resolution-order).
+
+```ts
+function getFilterOperatorsForColumn<TRow>(
+  column: ColumnDef<TRow>,
+  options?: FilterOperatorsConfig<TRow>
+): FilterOperator<TRow>[];
+```
+
+## getDefaultFilterOperatorsByType
+
+Returns the built-in operators, keyed by column type.
+
+```ts
+function getDefaultFilterOperatorsByType<TRow = unknown>(): Record<ColumnType, FilterOperator<TRow>[]>;
+```
+
+## resolveLocaleText
+
+Merges overrides over a built-in bundle.
+
+```ts
+function resolveLocaleText(
+  locale?: DataGridLocale,
+  overrides?: Partial<DataGridLocaleText>
+): DataGridLocaleText;
+```
+
+## formatLocale
+
+Fills `{placeholder}` values in a string.
+
+```ts
+function formatLocale(template: string, values: Record<string, string | number>): string;
+```
+
+## EN_LOCALE_TEXT and PT_LOCALE_TEXT
+
+The complete `DataGridLocaleText` bundles. See [Locale keys](/docs/api/locale-keys).

@@ -1,0 +1,52 @@
+---
+title: Custom filter operators
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import Source from '!!raw-loader!@site/examples/custom-operator.tsx';
+
+Add or replace operators per column, per field, or per column type.
+
+## Basic usage
+
+<CodeBlock language="tsx" title="custom-operator.tsx">{Source}</CodeBlock>
+
+## Options
+
+| Prop or field | Type | Description |
+| --- | --- | --- |
+| `column.filterOperators` | `FilterOperator[]` | Operators for one column. |
+| `filterOperatorsByField` | `Record<string, FilterOperator[]>` | Operators keyed by `field`. |
+| `filterOperatorsByType` | `Partial<Record<ColumnType, FilterOperator[]>>` | Operators keyed by column type. |
+| `column.filterForceOperator` | `string` | Always use this operator. Takes the operator's `value`, not its label. |
+| `column.filterHideOperator` | `boolean` | Hide the operator picker. |
+
+## Resolution order
+
+The first non-empty source wins:
+
+1. `column.filterOperators`
+2. `filterOperatorsByField`
+3. `filterSelectOptions`, which selects the built-in select operators
+4. `filterOperatorsByType`
+5. The default operators for the column type
+
+## Writing an operator
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `value` | `string` | Stored in `FilterItem.operator`. |
+| `label` | `string` | Shown in the picker, unless `localeText.operatorLabels` has this `value`. |
+| `aliases` | `string[]` | Other values that resolve to this operator. |
+| `requiresValue` | `boolean` | Set `false` to hide the value input. |
+| `inputType` | `'text' \| 'number' \| 'date' \| 'datetime' \| 'boolean' \| 'multi'` | Input shown in the panel. |
+| `apply` | `(params: FilterOperatorParams) => boolean` | Returns whether a row matches. |
+
+## Client vs server
+
+`apply` only runs in client mode. In server mode your API must understand the operator's `value`.
+
+## Related
+
+- [`FilterOperator`](/docs/api/types#filteroperator)
+- [`getDefaultFilterOperatorsByType`](/docs/api/utilities#getdefaultfilteroperatorsbytype)

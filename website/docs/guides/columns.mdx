@@ -1,0 +1,38 @@
+---
+title: Columns
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import Source from '!!raw-loader!@site/examples/columns.tsx';
+
+A `ColumnDef` describes one column: which field it reads, how wide it is, and how its values behave.
+
+## Basic usage
+
+<CodeBlock language="tsx" title="columns.tsx">{Source}</CodeBlock>
+
+## Options
+
+| Field | Type | Default | Description |
+| --- | --- | --- | --- |
+| `field` | `string` | Required | Key read from the row, and the column's identity. |
+| `headerName` | `string` | Required | Header label. |
+| `type` | `ColumnType` | `'string'` | Sets default sorting, filter operators, and input. |
+| `width` | `number` | `140` | Fixed width in pixels. |
+| `minWidth` | `number` | `96` | Lower bound for `width` and `flex`. |
+| `flex` | `number` | None | Share of the width left after fixed columns. Overrides `width`. |
+| `align` | `'left' \| 'center' \| 'right'` | None | Cell alignment. |
+| `headerAlign` | `'left' \| 'center' \| 'right'` | None | Header alignment. |
+
+Column types are `'string'`, `'number'`, `'date'`, `'datetime'`, `'boolean'`, `'actions'`, and `'custom'`.
+
+When the columns are wider than the grid, the table scrolls horizontally.
+
+## Client vs server
+
+Column layout is always handled by the grid. In server mode, `type` still determines which filter operators appear, but your API has to apply them.
+
+## Related
+
+- [`ColumnDef` reference](/docs/api/column-def)
+- [Custom cells](/docs/guides/custom-cells)

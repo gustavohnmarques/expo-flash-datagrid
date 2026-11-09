@@ -1,0 +1,40 @@
+---
+title: Client vs server mode
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import ClientSource from '!!raw-loader!@site/examples/client-mode.tsx';
+import ServerSource from '!!raw-loader!@site/examples/server-pagination.tsx';
+
+The required `mode` prop decides who transforms the rows.
+
+| Step | `mode="client"` | `mode="server"` | `mode="server"` with `serverSearchMode="localRows"` |
+| --- | --- | --- | --- |
+| Filter | Grid | Your API | Your API |
+| Search | Grid | Your API | Grid, on the current `rows` |
+| Sort | Grid | Your API | Your API |
+| Paginate | Grid | Your API | Your API |
+
+## Client mode
+
+Use it when the full dataset is already in memory. The grid applies filter, search, sort, and paginate to `rows`, in that order.
+
+<CodeBlock language="tsx" title="client-mode.tsx">{ClientSource}</CodeBlock>
+
+## Server mode
+
+The grid renders `rows` as given and reports every change. Fetch the matching slice and pass the total as `rowCount` so the footer can page. Without `rowCount`, the grid falls back to `rows.length`.
+
+<CodeBlock language="tsx" title="server-pagination.tsx">{ServerSource}</CodeBlock>
+
+The query state your API receives has `paginationModel`, `sortModel`, `filterModel`, and `searchText`. See [`QueryState`](/docs/api/types#querystate).
+
+## Hybrid search
+
+Set `serverSearchMode="localRows"` when column filters and sorting belong to the API but the toolbar search should only narrow the rows you already have. See [Search](/docs/guides/search#client-vs-server).
+
+## Related
+
+- [State management](/docs/concepts/state-management)
+- [Pagination](/docs/guides/pagination)
+- [Infinite scroll](/docs/guides/infinite-scroll)

@@ -61,6 +61,13 @@ buck-out/
 android/app/libs
 android/keystores/debug.keystore
 
+# Docusaurus
+.docusaurus/
+
+# Local agent tooling
+.claude/
+.serena/
+
 # Yarn
 .yarn/*
 !.yarn/patches

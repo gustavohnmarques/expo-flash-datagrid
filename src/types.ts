@@ -141,7 +141,6 @@ export type DataGridLocale = 'en' | 'pt';
 export interface DataGridLocaleText {
   toolbarColumns: string;
   toolbarFilters: string;
-  toolbarExport: string;
   toolbarSearch: string;
   clearFilters: string;
   selectedRowsLabel: string; // Use "{count}" placeholder.
@@ -251,12 +250,21 @@ export interface DataGridProps<TRow> extends FilterOperatorsConfig<TRow> {
   mode: 'client' | 'server';
   getRowId?: (row: TRow) => string;
   rowHeight?: number;
+  /**
+   * @deprecated FlashList v2 measures items automatically, so this value is
+   * ignored. It will be removed in 1.0.
+   */
   estimatedItemSize?: number;
+  /**
+   * How far (in pixels) beyond the visible area FlashList should render rows
+   * ahead of time. Increase it to reduce blank rows during very fast scrolls,
+   * at the cost of more work per frame. Only applies when FlashList is used.
+   */
+  drawDistance?: number;
   listMode?: 'auto' | 'flash-list' | 'flat-list';
   getRowStyle?: (row: TRow, index: number) => StyleProp<ViewStyle>;
   zebraRows?: boolean;
   compact?: boolean;
-  cardViewBreakpoint?: number;
   style?: StyleProp<ViewStyle>;
 
   state?: Partial<QueryState>;

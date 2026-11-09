@@ -1,0 +1,55 @@
+---
+title: Theming
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import Source from '!!raw-loader!@site/examples/theme-dark.tsx';
+
+Override any part of the theme. Keys you leave out keep their defaults.
+
+## Basic usage
+
+<CodeBlock language="tsx" title="theme-dark.tsx">{Source}</CodeBlock>
+
+## Options
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `theme` | `DataGridTheme` | Light theme | Partial overrides. |
+| `getRowStyle` | `(row, index) => StyleProp<ViewStyle>` | None | Style per row. |
+| `zebraRows` | `boolean` | `false` | Alternate row backgrounds. |
+| `compact` | `boolean` | `false` | Reduces row height by 8, with a floor of 34. |
+| `style` | `StyleProp<ViewStyle>` | None | Style for the outer container. |
+
+## Theme keys
+
+| Key | Default |
+| --- | --- |
+| `headerBackground` | `#F3F4F6` |
+| `headerTextColor` | `#111827` |
+| `rowBackground` | `#FFFFFF` |
+| `rowAltBackground` | `#F9FAFB` |
+| `rowTextColor` | `#111827` |
+| `borderColor` | `#D1D5DB` |
+| `borderRadius` | `0` |
+| `dividerColor` | `#E5E7EB` |
+| `selectionBackground` | `#DBEAFE` |
+| `toolbarBackground` | `#F9FAFB` |
+| `toolbarTextColor` | `#374151` |
+| `footerBackground` | `#F9FAFB` |
+| `cellPadding` | `10` |
+| `headerHeight` | `44` |
+| `footerHeight` | `58` |
+
+:::note
+`theme` covers the toolbar, header, rows, and footer. The search, filter, and column dialogs and the row action menu keep their built-in light appearance.
+:::
+
+## Client vs server
+
+Theming is independent of the mode.
+
+## Related
+
+- [`DataGridTheme`](/docs/api/types#datagridtheme)
+- [Custom cells](/docs/guides/custom-cells)

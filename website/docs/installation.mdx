@@ -1,0 +1,55 @@
+---
+title: Installation
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+Add the package and its peer dependencies to an Expo project.
+
+<Tabs groupId="package-manager">
+  <TabItem value="npm" label="npm">
+
+```sh
+npm install expo-flash-datagrid @shopify/flash-list react-native-safe-area-context @expo/vector-icons @react-native-community/datetimepicker expo expo-font
+```
+
+  </TabItem>
+  <TabItem value="yarn" label="yarn">
+
+```sh
+yarn add expo-flash-datagrid @shopify/flash-list react-native-safe-area-context @expo/vector-icons @react-native-community/datetimepicker expo expo-font
+```
+
+  </TabItem>
+</Tabs>
+
+## Peer dependencies
+
+| Package | Version |
+| --- | --- |
+| `expo` | `>=55.0.0` |
+| `expo-font` | `>=55.0.0` |
+| `@expo/vector-icons` | `>=15.0.2` |
+| `@react-native-community/datetimepicker` | `>=9.1.0` |
+| `@shopify/flash-list` | `>=2.0.2 <3` |
+| `react-native-safe-area-context` | `>=5.6.0` |
+| `react`, `react-native` | Provided by your Expo SDK |
+
+See [Compatibility](/docs/compatibility) for tested SDK versions.
+
+## Wrap your app with SafeAreaProvider
+
+The search, filter, column, and action menus are safe-area aware, so your app needs a provider at the root.
+
+```tsx
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <YourScreen />
+    </SafeAreaProvider>
+  );
+}
+```

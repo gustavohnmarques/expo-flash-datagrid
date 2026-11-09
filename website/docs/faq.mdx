@@ -1,0 +1,39 @@
+---
+title: FAQ and troubleshooting
+---
+
+## The grid doesn't appear or is cut off
+
+`DataGrid` uses `flex: 1` with a `minHeight` of 320. Give its parent a bounded height, and avoid nesting it inside a vertical `ScrollView`.
+
+## Does it work in a bare React Native app?
+
+Not today. The package depends on `@expo/vector-icons`, `expo-font`, and `@react-native-community/datetimepicker`.
+
+## Does it work on the web?
+
+The supported platforms are iOS and Android. The date filter picker only opens on those two.
+
+## My filter's date input doesn't match
+
+Date filters accept ISO strings such as `2024-01-31` and localized input such as `31/01/2024`. `date` columns compare by day, and `datetime` columns keep the time.
+
+## `drawDistance` has no effect on Android
+
+With the default `listMode="auto"`, Android renders through FlatList. Set `listMode="flash-list"`. See [List engine](/docs/concepts/list-engine).
+
+## Only one filter can be added
+
+`maxFilters` defaults to `1`. Raise it to allow more.
+
+## `onRowPress` stopped firing
+
+While rows are selectable, through `checkboxSelection` or long-press selection mode, a tap toggles selection instead of calling `onRowPress`. See [Selection](/docs/guides/selection).
+
+## `onEndReached` never fires
+
+It is only forwarded when `infinite` is set. See [Infinite scroll](/docs/guides/infinite-scroll).
+
+## How do I export rows to CSV?
+
+The grid has no built-in export. Use [`applyClientPipeline`](/docs/api/utilities#applyclientpipeline) to get the rows the user sees, then write them out yourself.

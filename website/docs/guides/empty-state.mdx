@@ -1,0 +1,28 @@
+---
+title: Empty state
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import Source from '!!raw-loader!@site/examples/empty-state.tsx';
+
+When there are no rows and the grid isn't loading, it shows a message over the table area.
+
+## Basic usage
+
+<CodeBlock language="tsx" title="empty-state.tsx">{Source}</CodeBlock>
+
+## Options
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `emptyLabel` | `string` | `localeText.emptyLabel` | Text for the built-in empty state. |
+| `emptyState` | `ReactNode` | Built-in message | Replaces the empty state. Can contain buttons. |
+
+## Client vs server
+
+In client mode the message also appears when filters or search match nothing. In server mode it appears when `rows` is empty and `loading` is false.
+
+## Related
+
+- [Refresh and loading](/docs/guides/refresh-and-loading)
+- [Localization](/docs/guides/localization)

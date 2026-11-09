@@ -1,0 +1,44 @@
+---
+title: Row actions
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import Source from '!!raw-loader!@site/examples/row-actions.tsx';
+
+`rowActions` opens a menu for a row, by default on long press. Pass an array, or a function to build items per row.
+
+## Basic usage
+
+<CodeBlock language="tsx" title="row-actions.tsx">{Source}</CodeBlock>
+
+## Options
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `rowActions` | `GridRowActionsSource` | None | Items, or a function returning them. |
+| `rowActionMenuTrigger` | `'none' \| 'longPress'` | `'longPress'` when `rowActions` is set | Set `'none'` to keep long press for selection. |
+| `onRowActionMenuOpen` | `(params: RowActionMenuOpenParams) => void` | None | Called when the menu opens. |
+
+## GridRowActionItem
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `key` | `string` | Unique key. |
+| `label` | `string` | Menu text. |
+| `icon` | `GridRowActionIcon` | A node, or a function receiving `{ color, size }`. |
+| `cellLabel` | `string` | Text used in an actions column. |
+| `displayInCell` | `'icon' \| 'label' \| 'both'` | How an actions column shows it. |
+| `disabled` | `boolean` | Shows the item as unavailable. |
+| `destructive` | `boolean` | Styles the item as dangerous. |
+| `onPress` | `(params: RowLongPressParams) => void` | Receives `row`, `rowId`, and `position`. |
+
+The menu does not open when the source returns an empty list.
+
+## Client vs server
+
+Row actions work the same in both modes. After a change, refresh `rows` or refetch.
+
+## Related
+
+- [Actions column](/docs/guides/actions-column)
+- [`GridRowActionItem`](/docs/api/types#gridrowactionitem)

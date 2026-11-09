@@ -1,0 +1,33 @@
+---
+title: Actions column
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import Source from '!!raw-loader!@site/examples/actions-column.tsx';
+
+A column with `type: 'actions'` puts the actions on the row, so they don't depend on a long press.
+
+## Basic usage
+
+<CodeBlock language="tsx" title="actions-column.tsx">{Source}</CodeBlock>
+
+## Options
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `type` | `'actions'` | Marks the column as actions. It is excluded from sort, filter, and search. |
+| `actions` | `GridRowActionsSource` | Items, or a function returning them. |
+| `actionTrigger` | `GridActionCellTrigger` | The cell's `icon`, `label`, and `display`. |
+
+## Display order
+
+The cell uses `actionTrigger.display` first, then the item's `displayInCell`. Without either, it shows both when it has an icon and a label, otherwise whichever exists.
+
+## Client vs server
+
+Actions columns behave the same in both modes.
+
+## Related
+
+- [Row actions](/docs/guides/row-actions)
+- [`GridActionCellTrigger`](/docs/api/types#gridactioncelltrigger)

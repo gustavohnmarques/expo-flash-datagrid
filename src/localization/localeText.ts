@@ -3,7 +3,6 @@ import type { DataGridLocale, DataGridLocaleText } from '../types';
 export const EN_LOCALE_TEXT: DataGridLocaleText = {
   toolbarColumns: 'Columns',
   toolbarFilters: 'Filters',
-  toolbarExport: 'Export',
   toolbarSearch: 'Search',
   clearFilters: 'Clear filters',
   selectedRowsLabel: '{count} selected',
@@ -77,7 +76,6 @@ export const EN_LOCALE_TEXT: DataGridLocaleText = {
 export const PT_LOCALE_TEXT: DataGridLocaleText = {
   toolbarColumns: 'Colunas',
   toolbarFilters: 'Filtros',
-  toolbarExport: 'Exportar',
   toolbarSearch: 'Buscar',
   clearFilters: 'Limpar filtro',
   selectedRowsLabel: '{count} selecionado(s)',

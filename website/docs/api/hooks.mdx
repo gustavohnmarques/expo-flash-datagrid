@@ -1,0 +1,39 @@
+---
+title: Hooks
+---
+
+The grid uses these hooks internally and exports them for your own components.
+
+## useControlledState
+
+Holds a value that may be controlled by a prop. Returns the value, a setter that is a no-op while controlled, and whether it is controlled.
+
+```ts
+function useControlledState<T>(
+  controlledValue: T | undefined,
+  defaultValue: T
+): [T, (next: T | ((prev: T) => T)) => void, boolean];
+```
+
+## useDebouncedValue
+
+Returns `value` after it has stayed unchanged for `delayMs`.
+
+```ts
+function useDebouncedValue<T>(value: T, delayMs: number): T;
+```
+
+## useColumnLayout
+
+Computes the width of each visible column. Columns default to a width of 140 and a minimum of 96. Flex columns share what fixed columns leave.
+
+```ts
+function useColumnLayout<TRow>(params: {
+  columns: ColumnDef<TRow>[];
+  columnVisibilityModel: ColumnVisibilityModel;
+  containerWidth: number;
+}): {
+  visibleColumns: ColumnLayoutItem<TRow>[];
+  totalWidth: number;
+};
+```

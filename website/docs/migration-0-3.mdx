@@ -1,0 +1,32 @@
+---
+title: Migrating to 0.3
+---
+
+Most apps only need to update their Expo SDK and remove two options if they used them.
+
+## Update dependencies
+
+Version 0.3 is developed on Expo SDK 57. See [Compatibility](/docs/compatibility) for the tested range.
+
+## Remove `estimatedItemSize`
+
+FlashList v2 measures rows automatically, so the prop is ignored. It still compiles, but it will be removed in 1.0.
+
+```diff
+ <DataGrid
+   mode="client"
+   rows={rows}
+   columns={columns}
+-  estimatedItemSize={44}
+ />
+```
+
+Use [`drawDistance`](/docs/concepts/list-engine#options) if you need to tune how far ahead rows render.
+
+## Remove `cardViewBreakpoint`
+
+The prop was declared but never had an effect. Delete it.
+
+## Remove `toolbarExport`
+
+The grid has no export feature, so this translation key is gone from `DataGridLocaleText`. Delete it from any `localeText` override. TypeScript will point out the leftovers.

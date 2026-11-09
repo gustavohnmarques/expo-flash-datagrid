@@ -1,0 +1,44 @@
+---
+title: Search
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import Source from '!!raw-loader!@site/examples/search.tsx';
+import HybridSource from '!!raw-loader!@site/examples/server-local-search.tsx';
+
+The toolbar search looks through every column except actions columns. It matches raw values, `valueFormatter` output, and `filterSelectOptions` labels and values.
+
+## Basic usage
+
+<CodeBlock language="tsx" title="search.tsx">{Source}</CodeBlock>
+
+## Options
+
+| Prop or field | Type | Default | Description |
+| --- | --- | --- | --- |
+| `searchText` | `string` | `''` | Controlled search text. |
+| `onSearchTextChange` | `(next: string) => void` | None | Called when the text commits. |
+| `searchDebounceMs` | `number` | `300` | Debounce before the text commits. |
+| `column.searchable` | `boolean` | `true` | Set `false` to exclude a column. |
+| `serverSearchMode` | `'remote' \| 'localRows'` | `'remote'` | Where search runs in server mode. |
+| `serverLocalSearchText` | `string` | None | Controlled text for `localRows`. |
+| `onServerLocalSearchTextChange` | `(next: string) => void` | None | Called when the local text commits. |
+
+A new search returns to the first page.
+
+## Client vs server
+
+- `mode="client"`: the grid searches `rows`.
+- `mode="server"`: the grid reports `searchText`, and your API searches.
+- `mode="server"` with `serverSearchMode="localRows"`: the grid searches only the current `rows`, and emits no new query.
+
+<CodeBlock language="tsx" title="server-local-search.tsx">{HybridSource}</CodeBlock>
+
+With a local search active, paged mode shows the match count in the footer range and keeps page navigation based on `rowCount`. Infinite mode shows the match count for the rows loaded so far.
+
+The toolbar's **Clear filters** action resets `searchText`, `serverLocalSearchText`, `filterModel`, and `columnVisibilityModel`.
+
+## Related
+
+- [`applySearch`](/docs/api/utilities#applysearch)
+- [Client vs server mode](/docs/concepts/client-vs-server)

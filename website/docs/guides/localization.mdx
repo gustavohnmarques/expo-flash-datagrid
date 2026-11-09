@@ -1,0 +1,34 @@
+---
+title: Localization
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import Source from '!!raw-loader!@site/examples/localization.tsx';
+
+The grid ships with English and Portuguese text, and any string can be overridden.
+
+## Basic usage
+
+<CodeBlock language="tsx" title="localization.tsx">{Source}</CodeBlock>
+
+## Options
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `locale` | `'en' \| 'pt'` | `'en'` | Built-in text bundle. |
+| `localeText` | `Partial<DataGridLocaleText>` | None | Overrides, merged over the bundle. `operatorLabels` merges key by key. |
+
+Some strings take placeholders, such as `selectedRowsLabel: '{count} selected'`.
+
+## Exports
+
+`EN_LOCALE_TEXT` and `PT_LOCALE_TEXT` are the full bundles. `resolveLocaleText` merges overrides, and `formatLocale` fills placeholders.
+
+## Client vs server
+
+Localization is independent of the mode. Your column headers and `filterSelectOptions` labels are yours to translate.
+
+## Related
+
+- [Locale keys](/docs/api/locale-keys)
+- [Utilities](/docs/api/utilities#resolvelocaletext)

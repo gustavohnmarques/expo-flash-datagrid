@@ -1,0 +1,36 @@
+---
+title: Selection
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import Source from '!!raw-loader!@site/examples/selection-bulk-actions.tsx';
+
+Select rows with checkboxes, or by long-pressing a row. The toolbar shows the selected count and a clear action.
+
+## Basic usage
+
+<CodeBlock language="tsx" title="selection-bulk-actions.tsx">{Source}</CodeBlock>
+
+## Options
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `selectionModel` | `GridRowId[]` | `[]` | Controlled selected row IDs. |
+| `onSelectionModelChange` | `(next: GridRowId[]) => void` | None | Called when the selection changes. |
+| `checkboxSelection` | `boolean` | `false` | Adds a checkbox column. |
+| `getRowId` | `(row) => string` | `row.id`, then the row index | Identity stored in the selection. |
+
+## Behavior
+
+- With `checkboxSelection`, tapping a row toggles it, and `onRowPress` is not called.
+- Without it, a long press enters selection mode. It ends when the selection is empty.
+- If the row has [row actions](/docs/guides/row-actions) on long press, the menu opens instead of selection mode.
+
+## Client vs server
+
+Selection stores IDs and is independent of the mode. Selected IDs persist across pages, including rows no longer in `rows`.
+
+## Related
+
+- [Row actions](/docs/guides/row-actions)
+- [Events](/docs/guides/events)

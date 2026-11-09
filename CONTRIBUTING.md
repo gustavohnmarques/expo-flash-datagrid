@@ -117,9 +117,24 @@ The `package.json` file contains various scripts for common tasks:
 - `yarn typecheck`: type-check files with TypeScript.
 - `yarn lint`: lint files with [ESLint](https://eslint.org/).
 - `yarn test`: run unit tests with [Jest](https://jestjs.io/).
+- `yarn pack:local`: build the library and generate a local tarball in `release-artifacts/` for testing in a real app (see below).
 - `yarn example start`: start the Metro server for the example app.
 - `yarn example android`: run the example app on Android.
 - `yarn example ios`: run the example app on iOS.
+
+### Testing a build in a real app before publishing
+
+1. In this repo, run `yarn pack:local`. It builds `lib/` and writes
+   `release-artifacts/expo-flash-datagrid-local-<timestamp>.tgz` (git-ignored).
+2. Copy the tarball into the app (e.g. `<app>/vendor/`) and point the dependency at it:
+
+   ```json
+   "expo-flash-datagrid": "file:./vendor/expo-flash-datagrid-local-<timestamp>.tgz"
+   ```
+
+3. Reinstall in the app and restart Metro with a clean cache (`npx expo start -c`).
+   Use a new tarball name for each iteration so the package manager does not reuse a cached copy.
+4. When done, switch the dependency back to the published npm version.
 
 ### Sending a pull request
 

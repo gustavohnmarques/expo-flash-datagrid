@@ -1,0 +1,95 @@
+---
+title: Locale keys
+---
+
+Keys of `DataGridLocaleText`, with their English and Portuguese text. Override any of them through `localeText`. Strings marked with `{count}` are filled in with `formatLocale`.
+
+## Toolbar
+
+| Key | English | Portuguese |
+| --- | --- | --- |
+| `toolbarColumns` | Columns | Colunas |
+| `toolbarFilters` | Filters | Filtros |
+| `toolbarSearch` | Search | Buscar |
+| `clearFilters` | Clear filters | Limpar filtro |
+| `selectedRowsLabel` | `{count} selected` | `{count} selecionado(s)` |
+| `clearSelection` | Clear | Limpar |
+
+## Search dialog
+
+| Key | English | Portuguese |
+| --- | --- | --- |
+| `searchTitle` | Search rows | Buscar linhas |
+| `searchPlaceholder` | Type to search... | Digite para buscar... |
+| `searchApply` | Confirm | Confirmar |
+| `searchClear` | Clear | Limpar |
+| `cancel` | Cancel | Cancelar |
+
+## Columns dialog
+
+| Key | English | Portuguese |
+| --- | --- | --- |
+| `columnsTitle` | Columns | Colunas |
+| `done` | Done | Concluir |
+| `searchColumnsPlaceholder` | Search columns | Buscar colunas |
+| `showAll` | Show all | Mostrar todas |
+| `hideAll` | Hide all | Ocultar todas |
+| `reset` | Reset | Resetar |
+| `allColumnsVisible` | All columns visible | Todas as colunas visíveis |
+| `someColumnsHidden` | Some columns hidden | Algumas colunas ocultas |
+
+## Filters dialog
+
+| Key | English | Portuguese |
+| --- | --- | --- |
+| `filtersTitle` | Filters | Filtros |
+| `addFilter` | Add filter | Adicionar filtro |
+| `logicAnd` | And | E |
+| `logicOr` | Or | Ou |
+| `noFilters` | No filters. | Sem filtros. |
+| `fieldLabel` | Columns | Colunas |
+| `operatorLabel` | Operator | Operador |
+| `valueLabel` | Value | Valor |
+| `valuePlaceholder` | Filter value | Valor |
+| `valueBetweenPlaceholder` | min,max | min,max |
+| `booleanTrueLabel` | True | Verdadeiro |
+| `booleanFalseLabel` | False | Falso |
+| `removeFilter` | Clear filter | Limpar filtro |
+
+## Footer and empty state
+
+| Key | English | Portuguese |
+| --- | --- | --- |
+| `rowsPerPage` | Rows per page | Linhas por página |
+| `ofLabel` | of | de |
+| `loadingMoreRows` | Loading more rows... | Carregando mais linhas... |
+| `rowsLoadedLabel` | `{count} rows loaded` | `{count} linhas carregadas` |
+| `emptyLabel` | No records found | Nenhum registro encontrado |
+
+## Operator labels
+
+`operatorLabels` is a `Record<string, string>` keyed by operator `value`. Add your custom operators here to translate them. Overrides merge key by key.
+
+| Key | English | Portuguese |
+| --- | --- | --- |
+| `contains` | contains | contém |
+| `doesNotContain` | does not contain | não contém |
+| `equals` | equals | é igual a |
+| `doesNotEqual` | does not equal | não é igual a |
+| `startsWith` | starts with | começa com |
+| `endsWith` | ends with | termina com |
+| `isEmpty` | is empty | está vazio |
+| `isNotEmpty` | is not empty | não está vazio |
+| `isAnyOf` | is any of | é qualquer um dos |
+| `>` | greater than | maior que |
+| `>=` | greater than or equal to | maior ou igual a |
+| `<` | less than | menor que |
+| `<=` | less than or equal to | menor ou igual a |
+| `is` | is | é |
+| `not` | is not | não é |
+| `before` | before | antes de |
+| `onOrBefore` | on or before | em ou antes de |
+| `after` | after | depois de |
+| `onOrAfter` | on or after | em ou depois de |
+
+The bundles also include labels for compatibility aliases: `=`, `!=`, `notContains`, `notEquals`, `between`, `isTrue`, and `isFalse`.

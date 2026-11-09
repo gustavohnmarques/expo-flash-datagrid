@@ -184,6 +184,7 @@ export function DataGrid<TRow>({
   getRowId,
   rowHeight = 44,
   estimatedItemSize: _estimatedItemSize,
+  drawDistance,
   listMode = 'auto',
   getRowStyle,
   zebraRows,
@@ -1141,7 +1142,7 @@ export function DataGrid<TRow>({
 
             <View style={styles.listContainer}>
               {resolvedListMode === 'flash-list' ? (
-                <FlashList {...listProps} />
+                <FlashList {...listProps} drawDistance={drawDistance} />
               ) : (
                 <FlatList {...listProps} />
               )}
