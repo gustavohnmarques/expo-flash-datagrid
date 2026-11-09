@@ -1,0 +1,33 @@
+---
+title: Infinite scroll
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import Source from '!!raw-loader!@site/examples/server-infinite.tsx';
+
+With `infinite`, the grid shows every row you pass and asks for more as the user nears the end.
+
+## Basic usage
+
+<CodeBlock language="tsx" title="server-infinite.tsx">{Source}</CodeBlock>
+
+## Options
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `infinite` | `boolean` | `false` | Turns off page slicing and enables `onEndReached`. |
+| `onEndReached` | `() => void` | None | Called near the end of the list. Forwarded only when `infinite` is set. |
+| `onEndReachedThreshold` | `number` | `0.5` | Distance from the end that triggers it, in viewport lengths. |
+
+The footer replaces page controls with a count of the loaded rows.
+
+## Client vs server
+
+In client mode, `infinite` displays all processed rows at once. In server mode you own the cursor: reset it when filters, sort, or search change, and append each new page to `rows`.
+
+`onEndReached` can fire more than once. Guard against concurrent requests, as the example does with `loading`.
+
+## Related
+
+- [Pagination](/docs/guides/pagination)
+- [Refresh and loading](/docs/guides/refresh-and-loading)

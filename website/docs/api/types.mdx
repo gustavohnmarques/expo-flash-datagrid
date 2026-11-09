@@ -1,0 +1,298 @@
+---
+title: Types
+---
+
+Every type below is exported from `expo-flash-datagrid`. [`DataGridProps`](/docs/api/data-grid-props) and [`ColumnDef`](/docs/api/column-def) have their own pages.
+
+## State
+
+### QueryState
+
+```ts
+interface QueryState {
+  paginationModel: PaginationModel;
+  sortModel: SortModel;
+  filterModel: FilterModel;
+  searchText: string;
+  columnVisibilityModel: ColumnVisibilityModel;
+  selectionModel: GridRowId[];
+}
+```
+
+### PaginationModel
+
+```ts
+interface PaginationModel {
+  page: number; // zero-based
+  pageSize: number;
+}
+```
+
+### SortModel
+
+```ts
+type SortDirection = 'asc' | 'desc';
+
+interface SortItem {
+  field: string;
+  sort: SortDirection;
+}
+
+type SortModel = SortItem[];
+```
+
+### FilterModel
+
+```ts
+interface FilterItem {
+  id?: string;
+  field: string;
+  operator: string;
+  value?: unknown;
+}
+
+interface FilterModel {
+  items: FilterItem[];
+  logicOperator?: 'and' | 'or';
+}
+```
+
+### ColumnVisibilityModel
+
+```ts
+type ColumnVisibilityModel = Record<string, boolean>;
+```
+
+### GridRowId
+
+```ts
+type GridRowId = string;
+```
+
+### ServerSearchMode
+
+```ts
+type ServerSearchMode = 'remote' | 'localRows';
+```
+
+## Columns
+
+### ColumnType
+
+```ts
+type ColumnType = 'string' | 'number' | 'date' | 'datetime' | 'boolean' | 'actions' | 'custom';
+```
+
+### ColumnLayoutItem
+
+```ts
+interface ColumnLayoutItem<TRow> {
+  column: ColumnDef<TRow>;
+  width: number;
+}
+```
+
+### CellRenderParams
+
+```ts
+interface CellRenderParams<TRow> {
+  row: TRow;
+  value: unknown;
+  rowId: GridRowId;
+  field: string;
+  rowIndex: number;
+  column: ColumnDef<TRow>;
+  isSelected: boolean;
+}
+```
+
+### HeaderRenderParams
+
+```ts
+interface HeaderRenderParams<TRow> {
+  column: ColumnDef<TRow>;
+  sortDirection?: SortDirection;
+}
+```
+
+## Filters
+
+### FilterOperator
+
+```ts
+interface FilterOperator<TRow = unknown> {
+  value: string;
+  label: string;
+  aliases?: string[];
+  requiresValue?: boolean;
+  inputType?: 'text' | 'number' | 'date' | 'datetime' | 'boolean' | 'multi';
+  apply: (params: FilterOperatorParams<TRow>) => boolean;
+}
+```
+
+### FilterOperatorParams
+
+```ts
+interface FilterOperatorParams<TRow> {
+  cellValue: unknown;
+  filterValue: unknown;
+  row: TRow;
+  column: ColumnDef<TRow>;
+}
+```
+
+### FilterOperatorsConfig
+
+```ts
+interface FilterOperatorsConfig<TRow> {
+  filterOperatorsByType?: Partial<Record<ColumnType, FilterOperator<TRow>[]>>;
+  filterOperatorsByField?: Record<string, FilterOperator<TRow>[]>;
+}
+```
+
+### FilterSelectOption
+
+```ts
+interface FilterSelectOption {
+  value: unknown;
+  label: string;
+}
+```
+
+## Actions and events
+
+### GridRowActionItem
+
+```ts
+interface GridRowActionItem<TRow> {
+  key: string;
+  label?: string;
+  icon?: GridRowActionIcon;
+  cellLabel?: string;
+  displayInCell?: GridActionDisplayMode;
+  disabled?: boolean;
+  destructive?: boolean;
+  onPress: (params: RowLongPressParams<TRow>) => void;
+}
+```
+
+### GridRowActionsSource
+
+```ts
+type GridRowActionsSource<TRow> =
+  | GridRowActionItem<TRow>[]
+  | ((params: RowLongPressParams<TRow>) => GridRowActionItem<TRow>[]);
+```
+
+### GridRowActionIcon
+
+```ts
+type GridRowActionIcon = ReactNode | ((props: RowActionMenuIconProps) => ReactNode);
+```
+
+### RowActionMenuIconProps
+
+```ts
+interface RowActionMenuIconProps {
+  color: string;
+  size: number;
+}
+```
+
+### GridActionDisplayMode
+
+```ts
+type GridActionDisplayMode = 'icon' | 'label' | 'both';
+```
+
+### GridActionCellTrigger
+
+```ts
+interface GridActionCellTrigger {
+  icon?: GridRowActionIcon;
+  label?: string;
+  display?: GridActionDisplayMode;
+}
+```
+
+### RowLongPressParams
+
+```ts
+interface RowLongPressParams<TRow> {
+  row: TRow;
+  rowId: GridRowId;
+  position: GridPressPosition;
+}
+```
+
+### RowActionMenuOpenParams
+
+```ts
+interface RowActionMenuOpenParams<TRow> extends RowLongPressParams<TRow> {
+  actions: GridRowActionItem<TRow>[];
+}
+```
+
+### GridPressPosition
+
+```ts
+interface GridPressPosition {
+  pageX: number;
+  pageY: number;
+}
+```
+
+### CellEventParams
+
+```ts
+interface CellEventParams<TRow> {
+  row: TRow;
+  column: ColumnDef<TRow>;
+}
+```
+
+## Appearance
+
+### DataGridTheme
+
+All keys are optional. See [Theming](/docs/guides/theming#theme-keys) for defaults.
+
+```ts
+interface DataGridTheme {
+  headerBackground?: string;
+  headerTextColor?: string;
+  rowBackground?: string;
+  rowAltBackground?: string;
+  rowTextColor?: string;
+  borderColor?: string;
+  borderRadius?: number;
+  dividerColor?: string;
+  selectionBackground?: string;
+  toolbarBackground?: string;
+  toolbarTextColor?: string;
+  footerBackground?: string;
+  cellPadding?: number;
+  headerHeight?: number;
+  footerHeight?: number;
+}
+```
+
+### DataGridSortIcons
+
+```ts
+interface DataGridSortIcons {
+  asc?: ReactNode;
+  desc?: ReactNode;
+  none?: ReactNode;
+}
+```
+
+### DataGridLocale
+
+```ts
+type DataGridLocale = 'en' | 'pt';
+```
+
+### DataGridLocaleText
+
+See [Locale keys](/docs/api/locale-keys).

@@ -1,0 +1,14 @@
+---
+title: Server with local search
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import Source from '!!raw-loader!@site/examples/server-local-search.tsx';
+
+Filters and sorting go to the API, while the toolbar search only narrows the rows already returned.
+
+<CodeBlock language="tsx" title="server-local-search.tsx">{Source}</CodeBlock>
+
+Shared rows, columns, and the `fetchUsers` stand-in come from [`data.ts`](https://github.com/gustavohnmarques/expo-flash-datagrid/blob/main/website/examples/data.ts).
+
+**Read more:** [Search](/docs/guides/search)

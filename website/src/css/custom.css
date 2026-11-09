@@ -1,0 +1,302 @@
+@import '@fontsource-variable/archivo/wdth.css';
+@import '@fontsource-variable/jetbrains-mono/index.css';
+
+:root,
+html[data-theme='dark'] {
+  --site-ground: #0a1424;
+  --site-surface: #0f1d33;
+  --site-surface-raised: #16273f;
+  --site-rule: #1e3250;
+  --site-rule-strong: #30496f;
+  --site-text: #e4ecf8;
+  --site-text-soft: #b4c4dc;
+  --site-text-muted: #93a7c5;
+  --site-accent: #7fb4ff;
+  --site-accent-strong: #a0c8ff;
+  --site-accent-wash: #16335c;
+  --site-on-accent: #071120;
+
+  --ifm-color-primary: #7fb4ff;
+  --ifm-color-primary-dark: #64a3fe;
+  --ifm-color-primary-darker: #5699fe;
+  --ifm-color-primary-darkest: #2e7cf6;
+  --ifm-color-primary-light: #9ac5ff;
+  --ifm-color-primary-lighter: #a8cdff;
+  --ifm-color-primary-lightest: #d0e4ff;
+
+  --ifm-background-color: var(--site-ground);
+  --ifm-background-surface-color: var(--site-ground);
+  --ifm-font-color-base: var(--site-text);
+  --ifm-heading-color: var(--site-text);
+  --ifm-color-content: var(--site-text);
+  --ifm-color-content-secondary: var(--site-text-soft);
+  --ifm-link-color: var(--site-accent);
+  --ifm-link-hover-color: var(--site-accent-strong);
+  --ifm-hr-background-color: var(--site-rule);
+  --ifm-toc-border-color: var(--site-rule);
+  --ifm-table-border-color: var(--site-rule);
+  --ifm-table-stripe-background: transparent;
+  --ifm-navbar-background-color: rgba(10, 20, 36, 0.92);
+  --ifm-navbar-shadow: none;
+  --ifm-navbar-link-color: var(--site-text-soft);
+  --ifm-navbar-link-hover-color: var(--site-text);
+  --ifm-footer-background-color: var(--site-ground);
+  --ifm-footer-link-color: var(--site-text-soft);
+  --ifm-footer-title-color: var(--site-text);
+  --ifm-footer-color: var(--site-text-muted);
+  --ifm-menu-color: var(--site-text-soft);
+  --ifm-menu-color-background-active: var(--site-accent-wash);
+  --ifm-menu-color-background-hover: var(--site-surface);
+  --ifm-tabs-color-active: var(--site-accent);
+  --ifm-tabs-color-active-border: var(--site-accent);
+
+  --ifm-font-family-base: 'Archivo Variable', ui-sans-serif, system-ui, sans-serif;
+  --ifm-heading-font-family: 'Archivo Variable', ui-sans-serif, system-ui, sans-serif;
+  --ifm-font-family-monospace: 'JetBrains Mono Variable', ui-monospace, 'SF Mono', Menlo, monospace;
+  --ifm-code-font-size: 88%;
+  --ifm-code-background: var(--site-surface-raised);
+  --ifm-code-border-radius: 5px;
+  --ifm-pre-background: #0c182c;
+  --ifm-global-radius: 10px;
+  --ifm-line-height-base: 1.65;
+  --docusaurus-highlighted-code-line-bg: var(--site-accent-wash);
+  --docsearch-primary-color: var(--site-accent);
+}
+
+html {
+  background: var(--site-ground);
+  scrollbar-color: var(--site-rule-strong) var(--site-ground);
+}
+
+::selection {
+  background: #2b5ea8;
+  color: #ffffff;
+}
+
+:focus-visible {
+  border-radius: 4px;
+  outline: 2px solid var(--site-accent);
+  outline-offset: 2px;
+}
+
+::-webkit-scrollbar {
+  height: 10px;
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--site-rule-strong);
+  border: 2px solid var(--site-ground);
+  border-radius: 8px;
+}
+
+a {
+  text-underline-offset: 3px;
+}
+
+code,
+pre {
+  font-variant-ligatures: none;
+}
+
+code {
+  border: 0;
+}
+
+.navbar {
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--site-rule);
+}
+
+.navbar__title {
+  font-size: 1rem;
+  font-stretch: 106%;
+  font-weight: 620;
+  letter-spacing: -0.01em;
+}
+
+.navbar__link--active {
+  color: var(--site-text);
+}
+
+.footer,
+.footer--dark {
+  --ifm-footer-background-color: var(--site-ground);
+  --ifm-footer-color: var(--site-text-muted);
+  --ifm-footer-link-color: var(--site-text-soft);
+  --ifm-footer-title-color: var(--site-text);
+  border-top: 1px solid var(--site-rule);
+}
+
+.footer__copyright a {
+  color: var(--site-text-soft);
+}
+
+/* Reading column */
+.theme-doc-markdown {
+  font-size: 1.0313rem;
+}
+
+.theme-doc-markdown > p,
+.theme-doc-markdown > ul,
+.theme-doc-markdown > ol {
+  max-width: 72ch;
+}
+
+.theme-doc-markdown h1 {
+  font-size: clamp(2.2rem, 4vw, 3rem);
+  font-stretch: 110%;
+  font-weight: 640;
+  letter-spacing: -0.028em;
+  line-height: 1.08;
+}
+
+.theme-doc-markdown h2 {
+  font-size: 1.6rem;
+  font-stretch: 106%;
+  font-weight: 620;
+  letter-spacing: -0.018em;
+  margin-top: 3rem;
+}
+
+.theme-doc-markdown h3 {
+  font-size: 1.2rem;
+  font-weight: 620;
+  margin-top: 2.25rem;
+}
+
+/* Reference tables */
+.theme-doc-markdown table {
+  border-collapse: collapse;
+  display: block;
+  font-size: 0.9375rem;
+  font-variant-numeric: tabular-nums;
+  overflow-x: auto;
+  width: 100%;
+}
+
+.theme-doc-markdown thead tr {
+  background: transparent;
+  border-bottom: 1px solid var(--site-rule-strong);
+}
+
+.theme-doc-markdown tr {
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--site-rule);
+}
+
+.theme-doc-markdown th,
+.theme-doc-markdown td {
+  background: transparent;
+  border: 0;
+  padding: 10px 18px 10px 0;
+  vertical-align: top;
+}
+
+.theme-doc-markdown th {
+  color: var(--site-text-muted);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.theme-doc-markdown td:first-child code {
+  color: var(--site-text);
+  white-space: nowrap;
+}
+
+.theme-doc-markdown td code {
+  font-size: 0.82rem;
+  overflow-wrap: anywhere;
+}
+
+/* Code */
+.theme-code-block {
+  border: 1px solid var(--site-rule);
+  box-shadow: none;
+}
+
+[class*='codeBlockTitle'] {
+  background: var(--site-surface) !important;
+  border-bottom: 1px solid var(--site-rule);
+  color: var(--site-text-soft);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+/* Callouts: a full hairline instead of the framework's thick edge */
+.alert {
+  --ifm-alert-border-width: 1px;
+  --ifm-alert-border-left-width: 1px;
+  --ifm-alert-shadow: none;
+  border-radius: 10px;
+  border-style: solid;
+  color: var(--site-text);
+}
+
+.alert--secondary,
+.alert--info {
+  --ifm-alert-background-color: var(--site-surface);
+  --ifm-alert-border-color: var(--site-rule-strong);
+  --ifm-alert-foreground-color: var(--site-text);
+}
+
+.alert--warning {
+  --ifm-alert-background-color: #221d14;
+  --ifm-alert-border-color: #6b5426;
+  --ifm-alert-foreground-color: var(--site-text);
+}
+
+.tabs__item {
+  border-radius: 6px 6px 0 0;
+}
+
+.tabs__item:hover {
+  background: var(--site-surface);
+}
+
+.pagination-nav__link {
+  border-color: var(--site-rule);
+}
+
+.pagination-nav__link:hover {
+  background: var(--site-surface);
+  border-color: var(--site-rule-strong);
+}
+
+.menu__link--active:not(.menu__link--sublist) {
+  color: var(--site-text);
+  font-weight: 600;
+}
+
+.table-of-contents__link--active {
+  color: var(--site-accent);
+}
+
+@media (max-width: 720px) {
+  .theme-doc-markdown td code {
+    overflow-wrap: normal;
+    white-space: nowrap;
+  }
+
+  .theme-doc-markdown td:last-child code {
+    white-space: normal;
+  }
+
+  .theme-doc-markdown td:last-child {
+    min-width: 220px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

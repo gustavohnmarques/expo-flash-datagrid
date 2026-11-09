@@ -1,0 +1,35 @@
+---
+title: State management
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import Source from '!!raw-loader!@site/examples/controlled-state.tsx';
+
+Grid state is one object, `QueryState`, with six parts: `paginationModel`, `sortModel`, `filterModel`, `searchText`, `columnVisibilityModel`, and `selectionModel`. You choose how much of it to own.
+
+## Three levels of control
+
+| Approach | Props | Use it when |
+| --- | --- | --- |
+| Uncontrolled | `initialState` | The grid can own its state. `initialState` is read once. |
+| Whole state | `state`, `onStateChange` | One screen owns everything, as in server mode. |
+| Per model | `sortModel`, `filterModel`, `searchText`, `paginationModel`, `columnVisibilityModel`, `selectionModel`, each with an `on…Change` callback | You only need to own one part. |
+
+`state` is partial: only the keys you include are controlled, and the rest stay internal. An individual prop such as `sortModel` wins over the same key in `state`.
+
+## Example
+
+This screen controls only the filter, so a saved filter can be applied from outside the grid.
+
+<CodeBlock language="tsx" title="controlled-state.tsx">{Source}</CodeBlock>
+
+## Change callbacks
+
+`onStateChange` and `onQueryChange` both fire with the full next `QueryState`, and only when something actually changed. The per-model callbacks fire first, for just the models that changed.
+
+Changing the sort, filters, or search resets the page to `0`.
+
+## Related
+
+- [`QueryState`](/docs/api/types#querystate)
+- [`useControlledState`](/docs/api/hooks#usecontrolledstate)

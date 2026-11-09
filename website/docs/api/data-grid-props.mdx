@@ -1,0 +1,123 @@
+---
+title: DataGrid props
+---
+
+`DataGrid<TRow>` accepts the props below, grouped by purpose. Only `rows`, `columns`, and `mode` are required.
+
+## Data
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `rows` | `TRow[]` | Required | Rows to show. In server mode, the current page. |
+| `columns` | `ColumnDef<TRow>[]` | Required | Column definitions. See [`ColumnDef`](/docs/api/column-def). |
+| `mode` | `'client' \| 'server'` | Required | Who processes rows. See [Client vs server](/docs/concepts/client-vs-server). |
+| `getRowId` | `(row: TRow) => string` | `row.id`, then index | Row identity. |
+
+## State
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `state` | `Partial<QueryState>` | None | Controls the keys it includes. |
+| `initialState` | `Partial<QueryState>` | None | Starting state, read once. |
+| `onStateChange` | `(next: QueryState) => void` | None | Called with the full state on every change. |
+| `onQueryChange` | `(next: QueryState) => void` | None | Called with the same payload as `onStateChange`. |
+
+## Sorting
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `sortModel` | `SortModel` | `[]` | Controlled sort order. |
+| `onSortModelChange` | `(next: SortModel) => void` | None | Called when the sort changes. |
+| `enableMultiSort` | `boolean` | `false` | Sort by several columns. |
+| `sortIcons` | `DataGridSortIcons` | Built-in | Custom sort icons. |
+| `showUnsortedSortIcon` | `boolean` | `false` | Show an icon on unsorted columns. |
+
+## Filtering
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `filterModel` | `FilterModel` | `{ items: [], logicOperator: 'and' }` | Controlled filters. |
+| `onFilterModelChange` | `(next: FilterModel) => void` | None | Called when filters change. |
+| `maxFilters` | `number` | `1` | Most filters allowed. |
+| `filterOperatorsByType` | `Partial<Record<ColumnType, FilterOperator<TRow>[]>>` | None | Operators per column type. |
+| `filterOperatorsByField` | `Record<string, FilterOperator<TRow>[]>` | None | Operators per field. |
+
+## Search
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `searchText` | `string` | `''` | Controlled search text. |
+| `onSearchTextChange` | `(next: string) => void` | None | Called when text commits. |
+| `searchDebounceMs` | `number` | `300` | Debounce in milliseconds. |
+| `serverSearchMode` | `ServerSearchMode` | `'remote'` | `'remote'` or `'localRows'`. |
+| `serverLocalSearchText` | `string` | None | Controlled text for `localRows`. |
+| `onServerLocalSearchTextChange` | `(next: string) => void` | None | Called when local text commits. |
+
+## Column visibility
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `columnVisibilityModel` | `ColumnVisibilityModel` | `{}` | Hidden columns have `false`. |
+| `onColumnVisibilityModelChange` | `(next: ColumnVisibilityModel) => void` | None | Called on change. |
+
+## Pagination and loading
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `paginationModel` | `PaginationModel` | `{ page: 0, pageSize: 25 }` | Controlled page and size. |
+| `onPaginationModelChange` | `(next: PaginationModel) => void` | None | Called on change. |
+| `pageSizeOptions` | `number[]` | `[10, 25, 50, 100]` | Footer page sizes. |
+| `rowCount` | `number` | `rows.length` | Total rows, for server mode. |
+| `loading` | `boolean` | `false` | Shows the loading overlay. |
+| `loadingOverlay` | `ReactNode` | Built-in | Custom overlay. |
+| `refreshing` | `boolean` | `false` | Pull-to-refresh state. |
+| `onRefresh` | `() => void` | None | Enables pull-to-refresh. |
+| `infinite` | `boolean` | `false` | Infinite scroll. |
+| `onEndReached` | `() => void` | None | Requires `infinite`. |
+| `onEndReachedThreshold` | `number` | `0.5` | Trigger distance. |
+
+## Selection
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `selectionModel` | `GridRowId[]` | `[]` | Controlled selection. |
+| `onSelectionModelChange` | `(next: GridRowId[]) => void` | None | Called on change. |
+| `checkboxSelection` | `boolean` | `false` | Adds a checkbox column. |
+
+## Actions and events
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `rowActions` | `GridRowActionsSource<TRow>` | None | Row menu items. |
+| `rowActionMenuTrigger` | `'none' \| 'longPress'` | `'longPress'` with `rowActions` | What opens the menu. |
+| `onRowActionMenuOpen` | `(params: RowActionMenuOpenParams<TRow>) => void` | None | Menu opened. |
+| `onRowPress` | `(row: TRow) => void` | None | Row tapped. |
+| `onRowLongPress` | `(row: TRow) => void` | None | Row long-pressed. |
+| `onRowLongPressDetails` | `(params: RowLongPressParams<TRow>) => void` | None | Long press, with position. |
+| `onCellPress` | `(params: CellEventParams<TRow>) => void` | None | Cell tapped. |
+| `onCellLongPress` | `(params: CellEventParams<TRow>) => void` | None | Cell long-pressed. |
+
+## Rendering
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `rowHeight` | `number` | `44` | Row height. |
+| `listMode` | `'auto' \| 'flash-list' \| 'flat-list'` | `'auto'` | List engine. Auto uses FlashList on iOS and FlatList on Android. |
+| `drawDistance` | `number` | FlashList default | FlashList only. On Android it needs `listMode="flash-list"`. |
+| `estimatedItemSize` | `number` | None | **Deprecated and ignored.** Removed in 1.0. |
+| `getRowStyle` | `(row: TRow, index: number) => StyleProp<ViewStyle>` | None | Style per row. |
+| `zebraRows` | `boolean` | `false` | Alternate row colors. |
+| `compact` | `boolean` | `false` | Shorter rows. |
+| `style` | `StyleProp<ViewStyle>` | None | Container style. |
+| `toolbarTitle` | `ReactNode` | None | Content at the start of the toolbar. |
+| `testID` | `string` | None | Test identifier for the container. |
+
+## Appearance and text
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `theme` | `DataGridTheme` | Light theme | Theme overrides. |
+| `locale` | `DataGridLocale` | `'en'` | `'en'` or `'pt'`. |
+| `localeText` | `Partial<DataGridLocaleText>` | None | Text overrides. |
+| `emptyLabel` | `string` | Locale text | Empty message. |
+| `emptyState` | `ReactNode` | Built-in | Custom empty state. |

@@ -1,0 +1,54 @@
+---
+title: Filtering
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import Source from '!!raw-loader!@site/examples/date-and-boolean-filters.tsx';
+import SelectSource from '!!raw-loader!@site/examples/select-filters.tsx';
+
+The toolbar's filter panel adapts to each column's type. Operators that need no value, such as `isEmpty`, hide the value input.
+
+## Basic usage
+
+<CodeBlock language="tsx" title="date-and-boolean-filters.tsx">{Source}</CodeBlock>
+
+## Select filters
+
+Pass `filterSelectOptions` to replace the text input with a picker, and add `filterSelectMultiple` to allow several values.
+
+<CodeBlock language="tsx" title="select-filters.tsx">{SelectSource}</CodeBlock>
+
+## Options
+
+| Prop or field | Type | Default | Description |
+| --- | --- | --- | --- |
+| `filterModel` | `FilterModel` | `{ items: [], logicOperator: 'and' }` | Controlled filters. |
+| `onFilterModelChange` | `(next: FilterModel) => void` | None | Called when filters change. |
+| `maxFilters` | `number` | `1` | Most filters a user can add. Minimum 1. |
+| `filterModel.logicOperator` | `'and' \| 'or'` | `'and'` | How filters combine. |
+| `column.filterable` | `boolean` | `true` | Set `false` to exclude a column. |
+| `column.filterSelectOptions` | `FilterSelectOption[]` | None | Values offered by the picker. |
+| `column.filterSelectMultiple` | `boolean` | `false` | Allow several selected values. |
+
+Actions columns are never filterable.
+
+## Default operators
+
+| Column | Operators |
+| --- | --- |
+| `string`, `actions`, `custom` | `contains`, `doesNotContain`, `equals`, `doesNotEqual`, `startsWith`, `endsWith`, `isEmpty`, `isNotEmpty`, `isAnyOf` |
+| `number` | `equals`, `doesNotEqual`, `>`, `>=`, `<`, `<=`, `isEmpty`, `isNotEmpty` |
+| `date`, `datetime` | `is`, `not`, `before`, `onOrBefore`, `after`, `onOrAfter`, `isEmpty`, `isNotEmpty` |
+| `boolean` | `is`, `isEmpty` |
+| With `filterSelectOptions` | `equals`, `doesNotEqual`, `isAnyOf`, `isEmpty`, `isNotEmpty` |
+
+Date filters accept ISO strings like `2024-01-31` and localized input like `31/01/2024`. A `date` column compares by day, and `datetime` keeps the time. The date picker opens on iOS and Android.
+
+## Client vs server
+
+In client mode the grid applies the operators. In server mode it reports `filterModel`, and your API interprets each `operator` and `value`.
+
+## Related
+
+- [Custom filter operators](/docs/guides/custom-filter-operators)
+- [`FilterModel`](/docs/api/types#filtermodel)

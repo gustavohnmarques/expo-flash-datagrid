@@ -1,0 +1,24 @@
+---
+title: Quick start
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import Source from '!!raw-loader!@site/examples/quick-start.tsx';
+
+The smallest working grid needs three props: `mode`, `rows`, and `columns`.
+
+<CodeBlock language="tsx" title="UsersScreen.tsx">{Source}</CodeBlock>
+
+Run it and you already have a toolbar with search, filters, and column controls, sortable headers, and a pagination footer. The grid stores that state itself until you decide to [control it](/docs/concepts/state-management).
+
+:::note Give the grid room
+`DataGrid` fills its parent with `flex: 1` and has a `minHeight` of 320. Place it in a parent with a bounded height, such as a screen with `flex: 1`, and not inside a vertical `ScrollView`.
+:::
+
+Rows are identified by `row.id`. If your rows use another key, pass `getRowId`.
+
+## Next steps
+
+- [Client vs server mode](/docs/concepts/client-vs-server)
+- [Columns](/docs/guides/columns)
+- [All props](/docs/api/data-grid-props)

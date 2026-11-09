@@ -1,0 +1,32 @@
+---
+title: Custom cells
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import Source from '!!raw-loader!@site/examples/custom-cells.tsx';
+
+Change what a cell shows with a derived value, a formatted string, or your own component.
+
+## Basic usage
+
+<CodeBlock language="tsx" title="custom-cells.tsx">{Source}</CodeBlock>
+
+## Options
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `valueGetter` | `(row) => unknown` | Computes the cell value. Sort, filter, and search use this value. |
+| `valueFormatter` | `(value, row) => string` | Formats the value for display. Global search also matches this text. |
+| `renderCell` | `(params: CellRenderParams) => ReactNode` | Replaces the cell's content. |
+| `renderHeader` | `(params: HeaderRenderParams) => ReactNode` | Replaces the header's content. |
+
+`renderCell` receives `row`, `value`, `rowId`, `field`, `rowIndex`, `column`, and `isSelected`. `renderHeader` receives `column` and `sortDirection`.
+
+## Client vs server
+
+These options only affect rendering in server mode. In client mode, `valueGetter` also feeds the sort, filter, and search steps.
+
+## Related
+
+- [`CellRenderParams`](/docs/api/types#cellrenderparams)
+- [Theming](/docs/guides/theming)

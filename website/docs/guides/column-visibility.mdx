@@ -1,0 +1,29 @@
+---
+title: Column visibility
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import Source from '!!raw-loader!@site/examples/column-visibility.tsx';
+
+The toolbar's column menu lets people show and hide columns.
+
+## Basic usage
+
+<CodeBlock language="tsx" title="column-visibility.tsx">{Source}</CodeBlock>
+
+## Options
+
+| Prop or field | Type | Default | Description |
+| --- | --- | --- | --- |
+| `columnVisibilityModel` | `ColumnVisibilityModel` | `{}` | Map of `field` to visibility. Only `false` hides a column. |
+| `onColumnVisibilityModelChange` | `(next: ColumnVisibilityModel) => void` | None | Called when visibility changes. |
+| `column.hideable` | `boolean` | `true` | Set `false` to keep the column out of the menu. |
+
+## Client vs server
+
+Visibility is handled by the grid in both modes. Hidden columns are still included in search.
+
+## Related
+
+- [Columns](/docs/guides/columns)
+- [State management](/docs/concepts/state-management)

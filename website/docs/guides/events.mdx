@@ -1,0 +1,35 @@
+---
+title: Events
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import Source from '!!raw-loader!@site/examples/events.tsx';
+
+React to taps and long presses on rows and cells.
+
+## Basic usage
+
+<CodeBlock language="tsx" title="events.tsx">{Source}</CodeBlock>
+
+## Options
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `onRowPress` | `(row) => void` | A row was tapped outside selection. |
+| `onRowLongPress` | `(row) => void` | A row was long-pressed. |
+| `onRowLongPressDetails` | `(params: RowLongPressParams) => void` | Long press, with `row`, `rowId`, and `position`. |
+| `onCellPress` | `(params: CellEventParams) => void` | A cell was tapped. Receives `row` and `column`. |
+| `onCellLongPress` | `(params: CellEventParams) => void` | A cell was long-pressed. |
+
+## Order
+
+A cell tap calls `onCellPress`, then runs the row press. While rows are selectable, a tap toggles selection instead of calling `onRowPress`.
+
+## Client vs server
+
+Events behave the same in both modes.
+
+## Related
+
+- [Selection](/docs/guides/selection)
+- [`RowLongPressParams`](/docs/api/types#rowlongpressparams)

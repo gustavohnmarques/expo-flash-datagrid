@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   stateOverlay: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
   },
   selectionCell: {
     alignItems: 'center',

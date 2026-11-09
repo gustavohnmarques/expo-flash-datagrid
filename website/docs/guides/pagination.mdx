@@ -1,0 +1,30 @@
+---
+title: Pagination
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import Source from '!!raw-loader!@site/examples/pagination.tsx';
+
+The footer shows the current range and lets people change page and page size. Pages are zero-based.
+
+## Basic usage
+
+<CodeBlock language="tsx" title="pagination.tsx">{Source}</CodeBlock>
+
+## Options
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `paginationModel` | `PaginationModel` | `{ page: 0, pageSize: 25 }` | Controlled page and size. |
+| `onPaginationModelChange` | `(next: PaginationModel) => void` | None | Called when either changes. |
+| `pageSizeOptions` | `number[]` | `[10, 25, 50, 100]` | Sizes offered in the footer. |
+| `rowCount` | `number` | `rows.length` | Total rows on the server. Server mode only. |
+
+## Client vs server
+
+In client mode the grid slices the processed rows. In server mode, `rows` must already be the current page, and `rowCount` tells the footer how many exist.
+
+## Related
+
+- [Infinite scroll](/docs/guides/infinite-scroll)
+- [`paginateRows`](/docs/api/utilities#paginaterows)

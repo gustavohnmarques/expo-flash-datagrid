@@ -1,0 +1,13 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "..",
+    "noEmit": true,
+    "paths": {
+      "expo-flash-datagrid": ["../src/index"]
+    },
+    "types": []
+  },
+  "include": ["examples/**/*.ts", "examples/**/*.tsx"],
+  "exclude": []
+}

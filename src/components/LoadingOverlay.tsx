@@ -11,7 +11,7 @@ export const LoadingOverlay = React.memo(function LoadingOverlay() {
 
 const styles = StyleSheet.create({
   container: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     alignItems: 'center',
     backgroundColor: 'rgba(255, 255, 255, 0.72)',
     justifyContent: 'center',

@@ -1,0 +1,30 @@
+---
+title: Refresh and loading
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import Source from '!!raw-loader!@site/examples/refresh-loading.tsx';
+
+Add pull-to-refresh and show a loading state over the grid.
+
+## Basic usage
+
+<CodeBlock language="tsx" title="refresh-loading.tsx">{Source}</CodeBlock>
+
+## Options
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `loading` | `boolean` | `false` | Shows the overlay and suppresses the empty state. |
+| `loadingOverlay` | `ReactNode` | Built-in spinner | Replaces the overlay's content. |
+| `refreshing` | `boolean` | `false` | Pull-to-refresh indicator. Only used with `onRefresh`. |
+| `onRefresh` | `() => void` | None | Enables pull-to-refresh. |
+
+## Client vs server
+
+Both props are display-only, and work the same in both modes. In server mode you typically tie `loading` to the request.
+
+## Related
+
+- [Empty state](/docs/guides/empty-state)
+- [Infinite scroll](/docs/guides/infinite-scroll)

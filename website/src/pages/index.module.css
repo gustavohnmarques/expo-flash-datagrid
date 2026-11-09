@@ -1,0 +1,359 @@
+.page {
+  margin: 0 auto;
+  max-width: 1180px;
+  padding: 0 clamp(16px, 4vw, 40px);
+  width: 100%;
+}
+
+.hero {
+  align-items: end;
+  display: grid;
+  gap: clamp(32px, 5vw, 72px);
+  grid-template-columns: minmax(0, 1fr) 280px;
+  padding: clamp(56px, 9vw, 112px) 0 clamp(32px, 4vw, 48px);
+}
+
+.heroTitle {
+  font-size: clamp(2.75rem, 7vw, 5.25rem);
+  font-stretch: 112%;
+  font-weight: 640;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin: 0;
+  max-width: 13ch;
+  text-wrap: balance;
+}
+
+.heroLead {
+  color: var(--site-text-soft);
+  font-size: clamp(1.125rem, 1.8vw, 1.3rem);
+  line-height: 1.5;
+  margin: 24px 0 0;
+  max-width: 48ch;
+}
+
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.primaryAction,
+.secondaryAction {
+  align-items: center;
+  border-radius: 8px;
+  display: inline-flex;
+  font-weight: 600;
+  min-height: 46px;
+  padding: 0 22px;
+  transition: background-color 180ms cubic-bezier(0.16, 1, 0.3, 1), border-color 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.primaryAction {
+  background: var(--site-accent);
+  color: var(--site-on-accent);
+}
+
+.primaryAction:hover {
+  background: var(--site-accent-strong);
+  color: var(--site-on-accent);
+  text-decoration: none;
+}
+
+.secondaryAction {
+  border: 1px solid var(--site-rule-strong);
+  color: var(--site-text);
+}
+
+.secondaryAction:hover {
+  background: var(--site-surface-raised);
+  color: var(--site-text);
+  text-decoration: none;
+}
+
+.spec {
+  border-top: 1px solid var(--site-rule-strong);
+  font-variant-numeric: tabular-nums;
+  margin: 0;
+}
+
+.spec > div {
+  border-bottom: 1px solid var(--site-rule);
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+}
+
+.spec dt {
+  color: var(--site-text-muted);
+  font-weight: 400;
+}
+
+.spec dd {
+  font-weight: 600;
+  margin: 0;
+}
+
+.heroCode :global(.theme-code-block) {
+  margin-bottom: 0;
+}
+
+.section {
+  padding-top: clamp(80px, 11vw, 136px);
+}
+
+.sectionTitle {
+  font-size: clamp(1.9rem, 4vw, 3rem);
+  font-stretch: 108%;
+  font-weight: 620;
+  letter-spacing: -0.025em;
+  line-height: 1.08;
+  margin: 0;
+  max-width: 20ch;
+  text-wrap: balance;
+}
+
+.sectionIntro {
+  color: var(--site-text-soft);
+  font-size: 1.125rem;
+  margin: 16px 0 0;
+  max-width: 54ch;
+}
+
+.modeLayout {
+  align-items: start;
+  display: grid;
+  gap: clamp(24px, 4vw, 56px);
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  margin-top: 40px;
+}
+
+.modeSwitch {
+  background: var(--site-surface);
+  border: 1px solid var(--site-rule);
+  border-radius: 10px;
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+}
+
+.modeButton {
+  background: transparent;
+  border: 0;
+  border-radius: 7px;
+  color: var(--site-text-soft);
+  cursor: pointer;
+  flex: 1 1 auto;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.82rem;
+  min-height: 40px;
+  padding: 0 10px;
+  transition: background-color 180ms cubic-bezier(0.16, 1, 0.3, 1), color 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+.modeButton:hover {
+  color: var(--site-text);
+}
+
+.modeButtonActive {
+  background: var(--site-accent);
+  color: var(--site-on-accent);
+  font-weight: 600;
+}
+
+.modeButtonActive:hover {
+  color: var(--site-on-accent);
+}
+
+.modeSummary {
+  color: var(--site-text-soft);
+  margin: 18px 0;
+  min-height: 3.4em;
+}
+
+.modeCode {
+  margin-bottom: 0;
+}
+
+.ledger {
+  border-collapse: collapse;
+  display: table;
+  font-variant-numeric: tabular-nums;
+  margin: 0;
+  width: 100%;
+}
+
+.ledger thead tr,
+.capabilities thead tr {
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--site-rule-strong);
+}
+
+.ledger tr,
+.capabilities tr {
+  background: transparent !important;
+  border: 0;
+  border-bottom: 1px solid var(--site-rule);
+}
+
+.ledger th,
+.ledger td,
+.capabilities th,
+.capabilities td {
+  background: transparent;
+  border: 0;
+  padding: 12px 16px 12px 0;
+  text-align: left;
+}
+
+.ledger thead th,
+.capabilities thead th {
+  color: var(--site-text-muted);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.ledger tbody th,
+.capabilities tbody th {
+  font-weight: 600;
+}
+
+.worker {
+  border-radius: 6px;
+  display: inline-block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  transition: background-color 240ms cubic-bezier(0.16, 1, 0.3, 1), color 240ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.workerGrid {
+  background: var(--site-accent-wash);
+  color: var(--site-accent);
+}
+
+.workerApi {
+  background: var(--site-surface-raised);
+  color: var(--site-text-soft);
+}
+
+.workerNote {
+  color: var(--site-text-muted);
+  font-size: 0.875rem;
+  margin-left: 10px;
+}
+
+.capabilities {
+  border-collapse: collapse;
+  display: table;
+  margin: 40px 0 0;
+  width: 100%;
+}
+
+.capabilities tbody th a {
+  color: var(--site-text);
+}
+
+.capabilities tbody tr {
+  transition: background-color 160ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.capabilities tbody tr:hover {
+  background: var(--site-surface) !important;
+}
+
+.capabilities tbody tr:hover a {
+  color: var(--site-accent);
+}
+
+.capabilities code {
+  background: transparent;
+  border: 0;
+  color: var(--site-text-soft);
+  font-size: 0.85rem;
+  padding: 0;
+}
+
+.split {
+  align-items: center;
+  display: grid;
+  gap: clamp(32px, 5vw, 72px);
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+}
+
+.splitReverse {
+  grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+}
+
+.split :global(.theme-code-block) {
+  margin-bottom: 0;
+}
+
+.textLink {
+  display: inline-block;
+  font-weight: 600;
+  margin-top: 20px;
+}
+
+.engine {
+  max-width: 720px;
+}
+
+.engine .ledger {
+  margin-top: 32px;
+}
+
+.install {
+  background: var(--site-surface);
+  border: 1px solid var(--site-rule);
+  border-radius: 14px;
+  margin: clamp(80px, 11vw, 136px) 0;
+  padding: clamp(24px, 5vw, 56px);
+}
+
+.installTitle {
+  font-size: clamp(2.2rem, 5vw, 3.75rem);
+  font-stretch: 112%;
+  font-weight: 640;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin: 0 0 28px;
+}
+
+.install :global(.theme-code-block) {
+  margin-bottom: 0;
+}
+
+.install pre code {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.installNote {
+  color: var(--site-text-soft);
+  margin: 24px 0 0;
+}
+
+@media (max-width: 860px) {
+  .hero,
+  .modeLayout,
+  .split,
+  .splitReverse {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .splitReverse > :first-child {
+    order: 2;
+  }
+
+  .modeSummary {
+    min-height: 0;
+  }
+
+  .propsColumn {
+    display: none;
+  }
+}

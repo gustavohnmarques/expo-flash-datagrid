@@ -1,0 +1,35 @@
+---
+title: Sorting
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import Source from '!!raw-loader!@site/examples/sorting.tsx';
+
+Tapping a header cycles a column through ascending, descending, and unsorted, and returns to the first page.
+
+## Basic usage
+
+<CodeBlock language="tsx" title="sorting.tsx">{Source}</CodeBlock>
+
+## Options
+
+| Prop or field | Type | Default | Description |
+| --- | --- | --- | --- |
+| `sortModel` | `SortModel` | `[]` | Controlled sort order. |
+| `onSortModelChange` | `(next: SortModel) => void` | None | Called when the sort changes. |
+| `enableMultiSort` | `boolean` | `false` | Keep earlier columns sorted when another is tapped. |
+| `sortIcons` | `DataGridSortIcons` | Built-in icons | Custom `asc`, `desc`, and `none` icons. |
+| `showUnsortedSortIcon` | `boolean` | `false` | Show the `none` icon on sortable, unsorted columns. |
+| `column.sortable` | `boolean` | `true` | Set `false` to disable sorting for a column. |
+| `column.sortComparator` | `(a, b, rowA, rowB) => number` | By column type | Custom comparison. |
+
+Actions columns are never sortable.
+
+## Client vs server
+
+In client mode the grid sorts `rows`. In server mode it only updates `sortModel`, and your API applies the order. `sortComparator` has no effect there.
+
+## Related
+
+- [`SortModel`](/docs/api/types#sortmodel)
+- [`applySorting`](/docs/api/utilities#applysorting)

@@ -1,0 +1,14 @@
+---
+title: Client mode
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import Source from '!!raw-loader!@site/examples/client-mode.tsx';
+
+A local list with multi-column sorting, several filters, and search. The grid does all the processing.
+
+<CodeBlock language="tsx" title="client-mode.tsx">{Source}</CodeBlock>
+
+Shared rows, columns, and the `fetchUsers` stand-in come from [`data.ts`](https://github.com/gustavohnmarques/expo-flash-datagrid/blob/main/website/examples/data.ts).
+
+**Read more:** [Client vs server mode](/docs/concepts/client-vs-server)

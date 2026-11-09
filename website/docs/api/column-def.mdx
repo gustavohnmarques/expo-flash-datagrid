@@ -1,0 +1,54 @@
+---
+title: ColumnDef
+---
+
+`ColumnDef<TRow>` describes one column. Only `field` and `headerName` are required.
+
+## Identity and layout
+
+| Field | Type | Default | Description |
+| --- | --- | --- | --- |
+| `field` | `string` | Required | Row key and column identity. |
+| `headerName` | `string` | Required | Header label. |
+| `type` | `ColumnType` | `'string'` | Value type. |
+| `width` | `number` | `140` | Fixed width. |
+| `minWidth` | `number` | `96` | Minimum width. |
+| `flex` | `number` | None | Share of the remaining width. |
+| `align` | `'left' \| 'center' \| 'right'` | None | Cell alignment. |
+| `headerAlign` | `'left' \| 'center' \| 'right'` | None | Header alignment. |
+
+## Behavior
+
+| Field | Type | Default | Description |
+| --- | --- | --- | --- |
+| `sortable` | `boolean` | `true` | Allows sorting. |
+| `filterable` | `boolean` | `true` | Allows filtering. |
+| `hideable` | `boolean` | `true` | Listed in the column menu. |
+| `searchable` | `boolean` | `true` | Included in global search. |
+
+## Values and rendering
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `valueGetter` | `(row: TRow) => unknown` | Derives the value. |
+| `valueFormatter` | `(value: unknown, row: TRow) => string` | Formats the value. |
+| `renderCell` | `(params: CellRenderParams<TRow>) => ReactNode` | Custom cell. |
+| `renderHeader` | `(params: HeaderRenderParams<TRow>) => ReactNode` | Custom header. |
+| `sortComparator` | `(a: unknown, b: unknown, rowA: TRow, rowB: TRow) => number` | Custom sort. |
+
+## Filter options
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `filterOperators` | `FilterOperator<TRow>[]` | Operators for this column. |
+| `filterSelectOptions` | `FilterSelectOption[]` | Picker values. |
+| `filterSelectMultiple` | `boolean` | Allows several values. |
+| `filterForceOperator` | `string` | Always uses this operator `value`. |
+| `filterHideOperator` | `boolean` | Hides the operator picker. |
+
+## Actions
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `actions` | `GridRowActionsSource<TRow>` | Items for a `type: 'actions'` column. |
+| `actionTrigger` | `GridActionCellTrigger` | Icon, label, and display of the cell. |
