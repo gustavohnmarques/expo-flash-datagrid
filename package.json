@@ -43,7 +43,7 @@
     "pack:local": "bob build && yarn pack --out release-artifacts/%s-local-$(date +%Y%m%d%H%M%S).tgz",
     "typecheck": "tsc",
     "test": "jest",
-    "release": "release-it --only-version",
+    "release": "release-it",
     "lint": "eslint \"**/*.{js,ts,tsx}\""
   },
   "keywords": [
